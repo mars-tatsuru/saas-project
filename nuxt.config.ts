@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     },
   },
 
-  ssr: false,
+  ssr: true,
 
   // compatibilityDate: https://nuxt.com/docs/api/nuxt-config#compatibilitydate
   compatibilityDate: "2024-04-03",
