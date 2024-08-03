@@ -21,7 +21,7 @@ watch(
 <template>
   <div class="whole bg-white dark:bg-black">
     <!-- Sidebar -->
-    <AppSidebar class="hidden md:block" />
+    <AppSidebar class="hidden md:grid" />
 
     <!-- Header -->
     <AppHeader class="hidden md:block" />
