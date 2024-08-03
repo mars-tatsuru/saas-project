@@ -27,9 +27,11 @@ const cardData = ref<Record<string, CardDataType>>({
   d: { title: "Card D", content: "D", dataSwapyItem: "d" },
   e: { title: "Card E", content: "E", dataSwapyItem: "e" },
   f: { title: "Card F", content: "F", dataSwapyItem: "f" },
+  g: { title: "Card E", content: "G", dataSwapyItem: "g" },
+  h: { title: "Card F", content: "H", dataSwapyItem: "h" },
 });
 
-type SlotItemType = "a" | "b" | "c" | "d" | "e" | "f" | null;
+type SlotItemType = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | null;
 
 // default slot items
 const DEFAULT: Record<string, SlotItemType> = {
@@ -39,6 +41,8 @@ const DEFAULT: Record<string, SlotItemType> = {
   "4": "d",
   "5": "e",
   "6": "f",
+  "7": "g",
+  "8": "h",
 };
 
 // slot items
@@ -108,6 +112,8 @@ const slotClasses = {
   "4": "col-start-3 col-end-4 bg-gray-100",
   "5": "col-start-1 col-end-2 bg-gray-100",
   "6": "col-start-2 col-end-4 bg-slate-400",
+  "7": "col-start-1 col-end-3 bg-slate-400",
+  "8": "col-start-3 col-end-4 bg-gray-100",
 };
 </script>
 

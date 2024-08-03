@@ -65,7 +65,7 @@ watch(
     </div>
     <div
       v-if="setContent === 'News'"
-      class="relative h-full w-full overflow-hidden px-6 pb-6 pt-16"
+      class="relative h-full max-h-64 w-full overflow-scroll px-6 pb-6 pt-16"
     >
       <News />
     </div>
@@ -78,6 +78,7 @@ watch(
         setContent !== 'News' &&
         setContent !== 'Profile'
       "
+      class="relative flex h-full min-h-52 w-full items-center justify-center overflow-hidden px-6 py-6"
     >
       <div class="text-4xl">{{ setContent }}</div>
     </div>
