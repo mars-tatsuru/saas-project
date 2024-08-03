@@ -58,11 +58,11 @@ watch(
       </svg>
     </div>
     <Dropdown @updateContent="updateContent" />
-    <div v-if="setContent === 'API'" class="h-full w-full px-1 pt-6">
+    <div v-if="setContent === 'API'" class="relative h-full w-full px-1 pt-8">
       <ColumnChart />
     </div>
     <div v-if="setContent === 'News'">
-      <div class="h-full w-full px-6 py-6"><News /></div>
+      <div class="relative h-full w-full px-6 pb-6 pt-4"><News /></div>
     </div>
     <div v-if="setContent === 'Profile'">
       <div class="text-4xl">Profile</div>

@@ -71,6 +71,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <h3 class="absolute left-4 top-3 text-2xl">API Usage</h3>
   <apexchart
     :key="series"
     height="100%"
