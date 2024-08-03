@@ -39,7 +39,6 @@ watch(
       class="handle absolute right-4 top-4 z-10 h-6 w-6 cursor-pointer"
       data-swapy-handle
     >
-      <!-- SVG content -->
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
@@ -58,18 +57,24 @@ watch(
       </svg>
     </div>
     <Dropdown @updateContent="updateContent" />
-    <div v-if="setContent === 'API'" class="relative h-full w-full px-1 pt-8">
+    <div
+      v-if="setContent === 'API Usage'"
+      class="relative h-full w-full px-1 pt-8"
+    >
       <ColumnChart />
     </div>
-    <div v-if="setContent === 'News'">
-      <div class="relative h-full w-full px-6 pb-6 pt-4"><News /></div>
+    <div
+      v-if="setContent === 'News'"
+      class="relative h-full w-full overflow-hidden px-6 pb-6 pt-16"
+    >
+      <News />
     </div>
     <div v-if="setContent === 'Profile'">
       <div class="text-4xl">Profile</div>
     </div>
     <div
       v-if="
-        setContent !== 'API' &&
+        setContent !== 'API Usage' &&
         setContent !== 'News' &&
         setContent !== 'Profile'
       "
