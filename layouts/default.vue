@@ -21,18 +21,27 @@ watch(
 <template>
   <div class="whole bg-white dark:bg-black">
     <!-- Sidebar -->
-    <AppSidebar />
+    <AppSidebar class="hidden md:block" />
 
     <!-- Header -->
-    <AppHeader />
+    <AppHeader class="hidden md:block" />
 
     <!-- Main -->
     <div
-      class="ml-auto min-h-screen bg-slate-100 p-4 transition-all duration-300 md:w-[calc(100%-16rem)] dark:bg-slate-900"
+      class="ml-auto min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 md:w-[calc(100%-16rem)] md:p-4 dark:bg-slate-900"
       ref="main"
     >
-      <div class="mt-14 min-h-[calc(100vh-5.5rem)] w-full dark:border-gray-700">
+      <div
+        class="mt-14 hidden min-h-[calc(100vh-5.5rem)] w-full md:block dark:border-gray-700"
+      >
         <slot />
+      </div>
+
+      <div class="flex min-h-screen items-center justify-center md:hidden">
+        <p class="text-slate-800 dark:text-white">
+          You can only use this app with PC.<br />
+          Please use a PC to access this app.
+        </p>
       </div>
     </div>
   </div>
