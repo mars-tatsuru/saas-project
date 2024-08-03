@@ -64,7 +64,9 @@ const updateChart = () => {
 
 onMounted(() => {
   //generate array of random numbers of length 10
-  updateChart();
+  setTimeout(() => {
+    updateChart();
+  }, 200);
 });
 </script>
 

@@ -19,7 +19,7 @@ onClickOutside(target, (event) => (isOpen.value = false));
 
 // select items
 const selectItems = ref([
-  { id: 1, name: "Dashboard" },
+  { id: 1, name: "News" },
   { id: 2, name: "API" },
   { id: 3, name: "Profile" },
 ]);
