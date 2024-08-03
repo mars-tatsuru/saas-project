@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import Dropdown from "@/components/dashboard/Dropdown.vue";
+import ColumnChart from "@/components/dashboard/ColumnChart.vue";
 
 const props = defineProps<{
   title: string;
@@ -30,11 +31,11 @@ watch(
 
 <template>
   <div
-    class="relative flex h-full items-center justify-center rounded-md bg-white text-4xl text-gray-700 dark:bg-slate-500 dark:text-gray-300"
+    class="relative flex h-full w-full items-center justify-center rounded-md bg-white text-4xl text-gray-700 dark:bg-slate-500 dark:text-gray-300"
     :data-swapy-item="props.dataSwapyItem"
   >
     <div
-      class="handle absolute right-4 top-4 h-6 w-6 cursor-pointer"
+      class="handle absolute right-4 top-4 z-10 h-6 w-6 cursor-pointer"
       data-swapy-handle
     >
       <!-- SVG content -->
@@ -56,6 +57,17 @@ watch(
       </svg>
     </div>
     <Dropdown @updateContent="updateContent" />
-    <div>{{ setContent }}</div>
+    <div v-if="setContent === 'API'" class="h-full w-full pt-6">
+      <ColumnChart />
+    </div>
+    <div v-else-if="setContent === 'DashBoard'">
+      <div class="text-4xl">DashBoard</div>
+    </div>
+    <div v-else-if="setContent === 'Profile'">
+      <div class="text-4xl">Profile</div>
+    </div>
+    <div v-else>
+      <div class="text-4xl">{{ setContent }}</div>
+    </div>
   </div>
 </template>
