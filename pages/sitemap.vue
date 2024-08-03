@@ -374,39 +374,41 @@ const removeTransitionStyle = () => {
 
 <template>
   <!-- vue flow -->
-  <ClientOnly>
-    <VueFlow
-      v-show="isReadyRender"
-      :nodes="nodes"
-      :edges="edges"
-      :class="{ dark }"
-      @nodesInitialized="layoutGraph('TB')"
-    >
-      <Background pattern-color="#aaa" :gap="16" />
+  <div class="h-[calc(100vh-5.5rem)] w-full">
+    <ClientOnly>
+      <VueFlow
+        v-show="isReadyRender"
+        :nodes="nodes"
+        :edges="edges"
+        :class="{ dark }"
+        @nodesInitialized="layoutGraph('TB')"
+      >
+        <Background pattern-color="#aaa" :gap="16" />
 
-      <template #node-custom="customNodeProps">
-        <FlowNode
-          :id="customNodeProps.id"
-          :data="customNodeProps.data"
-          :nodes="nodes"
-          @collapseNode="collapseNode"
-          @expandNode="expandNode"
-        />
-      </template>
+        <template #node-custom="customNodeProps">
+          <FlowNode
+            :id="customNodeProps.id"
+            :data="customNodeProps.data"
+            :nodes="nodes"
+            @collapseNode="collapseNode"
+            @expandNode="expandNode"
+          />
+        </template>
 
-      <template #edge-custom="customEdgeProps">
-        <FlowEdge
-          :id="customEdgeProps.id"
-          :source-x="customEdgeProps.sourceX"
-          :source-y="customEdgeProps.sourceY"
-          :target-x="customEdgeProps.targetX"
-          :target-y="customEdgeProps.targetY"
-        />
-      </template>
+        <template #edge-custom="customEdgeProps">
+          <FlowEdge
+            :id="customEdgeProps.id"
+            :source-x="customEdgeProps.sourceX"
+            :source-y="customEdgeProps.sourceY"
+            :target-x="customEdgeProps.targetX"
+            :target-y="customEdgeProps.targetY"
+          />
+        </template>
 
-      <MiniMap />
-    </VueFlow>
-  </ClientOnly>
+        <MiniMap />
+      </VueFlow>
+    </ClientOnly>
+  </div>
 </template>
 
 <style>
