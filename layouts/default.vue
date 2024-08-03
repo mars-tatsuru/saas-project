@@ -31,7 +31,7 @@ watch(
       class="ml-auto min-h-screen bg-slate-100 p-4 transition-all duration-300 md:w-[calc(100%-16rem)] dark:bg-slate-900"
       ref="main"
     >
-      <div class="mt-14 h-[calc(100vh-5.5rem)] w-full dark:border-gray-700">
+      <div class="mt-14 min-h-[calc(100vh-5.5rem)] w-full dark:border-gray-700">
         <slot />
       </div>
     </div>
