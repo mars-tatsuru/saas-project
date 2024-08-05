@@ -21,7 +21,7 @@ Start the development server on `http://localhost:3000`:
 pnpm run dev
 ```
 
-## Using Library
+## Libraries
 
 - vue-flow
 - tailwindcss
