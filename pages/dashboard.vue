@@ -4,11 +4,11 @@ import Card from "@/components/dashboard/Card.vue";
 import { createSwapy } from "swapy";
 
 definePageMeta({
-  title: "Dashboard",
+  title: "HOME",
 });
 
 useHead({
-  title: "Dashboard",
+  title: "HOME",
 });
 
 const isReady = ref(false);
@@ -126,7 +126,7 @@ const slotClasses = {
       v-for="slotId in Object.keys(slotItems)"
       :key="slotId"
       :class="[
-        'min-h-64 rounded-md border border-gray-200 dark:border-gray-700 dark:bg-gray-800',
+        'slot min-h-64 rounded-md border border-gray-200 bg-gray-300 dark:border-gray-700 dark:bg-gray-800',
         slotClasses[slotId as keyof typeof slotClasses],
       ]"
       :data-swapy-slot="slotId"
