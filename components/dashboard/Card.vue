@@ -21,7 +21,7 @@ const updateContent = (content: string) => {
   emit("updateCardData", props.dataSwapyItem, content);
 };
 
-// propsの変更を監視し、setContentを更新
+// watch for content changes
 watch(
   () => props.content,
   (newContent) => {

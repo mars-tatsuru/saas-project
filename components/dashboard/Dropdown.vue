@@ -66,12 +66,11 @@ const selectItems = ref([
         @click="updateContent(`${items.name}`)"
         :key="items.id"
       >
-        <a
-          href="#"
+        <span
           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
         >
           {{ items.name }}
-        </a>
+        </span>
       </li>
     </ul>
   </div>
