@@ -8,6 +8,7 @@ import tree from "@/data/site_tree.json";
 import FlowNode from "@/components/sitemap/FlowNode.vue";
 import FlowEdge from "@/components/sitemap/FlowEdge.vue";
 import { useLayout } from "@/utils/useLayout";
+import { useStyledLog } from "@/utils/useStyledLog";
 
 definePageMeta({
   title: "sitemap",
@@ -30,28 +31,6 @@ type TreeNode = {
 // use for checking if the nodes are initialized
 const isReadyRender = ref(false);
 const nodesInitialized = useNodesInitialized();
-
-// Utility Functions
-const styledLog = (message: string, data: any = null): void => {
-  // Skip logging in production
-  if (process.env.ENVIRONMENT === "production") {
-    return;
-  }
-
-  const styles = {
-    prefix:
-      "color: yellow; background-color: black; font-size: 14px; font-weight: bold; padding: 2px;",
-    message:
-      "color: limegreen; background-color: black; font-size: 14px; padding: 2px;",
-    data: "color: white; background-color: black; font-size: 14px; padding: 2px;",
-  };
-  console.log(
-    `%cDEBUG: %c${message}`,
-    styles.prefix,
-    styles.message,
-    data || "",
-  );
-};
 
 /************************************************
  * HELPER FUNCTIONS for creating Node and Edge
@@ -146,6 +125,8 @@ const {
   setViewport,
   toObject,
   onNodesChange,
+  findEdge,
+  updateEdge,
 } = useVueFlow();
 
 // initial data
@@ -161,20 +142,20 @@ const edges = ref(initialEdges);
  * onPaneReady is called when the VueFlow pane is ready (PANE_READY event)
  ***********************************************************************/
 onBeforeMount(() => {
-  styledLog("-1. onBeforeMount");
+  useStyledLog("-1. onBeforeMount");
 });
 
 onMounted(() => {
-  styledLog("0. onMounted");
+  useStyledLog("0. onMounted");
   isReadyRender.value = true;
 });
 
 onInit(async (vueFlowInstance) => {
-  styledLog("1. onInit");
+  useStyledLog("1. onInit");
 });
 
 onPaneReady(async (vueFlowInstance) => {
-  styledLog("2. onPaneReady");
+  useStyledLog("2. onPaneReady");
 
   // fit the view to the graph
   vueFlowInstance.fitView({
@@ -182,7 +163,7 @@ onPaneReady(async (vueFlowInstance) => {
   });
 
   nextTick(() => {
-    styledLog("3. nextTick(finish dom update)");
+    useStyledLog("3. nextTick(finish dom update)");
     // get the first node and calculate the center of the node
     const firstNode = nodes.value[0];
     const windowWidth = window.innerWidth;
@@ -205,7 +186,7 @@ onPaneReady(async (vueFlowInstance) => {
     }
   });
 
-  styledLog("4.zoomed");
+  useStyledLog("4.zoomed");
 });
 
 /************************************************************************
@@ -276,7 +257,7 @@ function toggleDarkMode() {
  ***********************************************************************/
 const collapseNode = (filterNodesPosition: any) => {
   // Get the same nodes and change the position
-  const sameIdNodes = nodes.value.map((node: any) => {
+  const sameIdNodes = nodes.value.map((node: any, index: number) => {
     if (node.id.includes(filterNodesPosition[0].id)) {
       // avoid the error of using the id as querySelector
       const escapedId = CSS.escape(node.id);
@@ -285,7 +266,7 @@ const collapseNode = (filterNodesPosition: any) => {
       ) as HTMLElement;
 
       if (theNode && node.position?.x !== 0) {
-        theNode.style.transform = `translate(${node.position?.x}px, ${node.position?.y}px)`;
+        theNode.style.transform = `translate(${node.position?.x + index}px, ${node.position?.y + index}px)`;
         theNode.style.transition = "transform 300ms ease-out";
       } else if (theNode) {
         theNode.style.transform = "";
@@ -298,8 +279,14 @@ const collapseNode = (filterNodesPosition: any) => {
           ...node.data,
         },
         position: {
-          x: filterNodesPosition[0].x,
-          y: filterNodesPosition[0].y,
+          x:
+            node.id === filterNodesPosition[0].id
+              ? filterNodesPosition[0].x
+              : filterNodesPosition[0].x + index,
+          y:
+            node.id === filterNodesPosition[0].id
+              ? filterNodesPosition[0].y
+              : filterNodesPosition[0].y + index,
         },
       };
     }
