@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import Card from "@/components/dashboard/Card.vue";
 import { createSwapy } from "swapy";
 
