@@ -1,7 +1,18 @@
 import { defineStore } from "pinia";
 
-export const useStore = defineStore("sidebar", () => {
-  const isSidebarOpen = ref(true);
+type User = {
+  name: string;
+  email: string;
+  picture: string;
+};
 
-  return { isSidebarOpen };
+export const useStore = defineStore("sidebar", () => {
+  const isSidebarOpen = ref<boolean>(true);
+  const userData = ref<User>({
+    name: "",
+    email: "",
+    picture: "",
+  });
+
+  return { isSidebarOpen, userData };
 });

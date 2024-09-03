@@ -3,6 +3,28 @@ import { useStore } from "@/stores/index";
 
 const route = useRoute();
 const store = useStore();
+const router = useRouter();
+const client = useSupabaseClient();
+const user = useSupabaseUser();
+
+
+/************************
+ * sign out
+ *************************/
+const signOutWithGoogle = async () => {
+  if (user.value) {
+    await client.auth.signOut();
+    store.userData = {
+      name: "",
+      email: "",
+      picture: "",
+    };
+    router.push("/login");
+  } else {
+    router.push("/login");
+  }
+
+};
 
 /************************
  * sidebar menu
@@ -268,9 +290,9 @@ const toggleSidebar = () => {
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink
-            to="/"
-            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+          <a
+            @click="signOutWithGoogle"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +312,7 @@ const toggleSidebar = () => {
             >
             Sign Out
           </span>
-          </NuxtLink>
+          </a>
         </li>
       </ul>
     </div>

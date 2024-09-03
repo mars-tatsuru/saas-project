@@ -4,6 +4,7 @@ import { onClickOutside } from "@vueuse/core";
 
 const route = useRoute();
 const store = useStore();
+const user = useSupabaseUser();
 
 /************************
  * header toggle
@@ -28,6 +29,17 @@ const openProfile = () => {
 // button以外をおしたらカードも閉じる
 const target = ref(null);
 onClickOutside(target, (event) => (isProfileCardOpen.value = false));
+
+/************************
+ * add userData into store
+ *************************/
+onMounted(() => {
+  store.userData = {
+    name: user.value?.user_metadata.name,
+    email: user.value?.user_metadata.email,
+    picture: user.value?.user_metadata.picture,
+  };
+});
 </script>
 
 <template>
@@ -42,7 +54,7 @@ onClickOutside(target, (event) => (isProfileCardOpen.value = false));
         </div>
         <div class="flex items-center">
           <div class="ms-3 flex items-center">
-            <div>
+            <div v-if="store.userData.picture">
               <button
                 type="button"
                 class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -52,7 +64,7 @@ onClickOutside(target, (event) => (isProfileCardOpen.value = false));
               >
                 <img
                   class="h-8 w-8 rounded-full"
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                  :src="store.userData.picture"
                   alt="user photo"
                 />
               </button>
@@ -65,6 +77,9 @@ onClickOutside(target, (event) => (isProfileCardOpen.value = false));
       v-if="isProfileCardOpen"
       ref="target"
       class="absolute -bottom-[320px] right-4"
+      :name="store.userData.name"
+      :email="store.userData.email"
+      :picture="store.userData.picture"
     />
   </nav>
 </template>
