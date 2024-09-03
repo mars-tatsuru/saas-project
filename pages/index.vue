@@ -10,6 +10,13 @@ useHead({
   title: "HOME",
 });
 
+/************************************************
+ * Determine if the user is logged in
+ *************************************************/
+definePageMeta({
+  middleware: "auth",
+});
+
 const isReady = ref(false);
 
 type CardDataType = {

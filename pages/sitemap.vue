@@ -18,6 +18,16 @@ useHead({
   title: "sitemap",
 });
 
+/************************************************
+ * Determine if the user is logged in
+ *************************************************/
+definePageMeta({
+  middleware: "auth",
+});
+
+/************************************************
+ * Sitemap
+ *************************************************/
 type TreeNode = {
   level?: number;
   thumbnailPath?: string;

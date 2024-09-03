@@ -6,6 +6,13 @@ definePageMeta({
 useHead({
   title: "Setting",
 });
+
+/************************************************
+ * Determine if the user is logged in
+ *************************************************/
+definePageMeta({
+  middleware: "auth",
+});
 </script>
 
 <template>

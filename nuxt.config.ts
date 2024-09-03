@@ -64,18 +64,18 @@ export default defineNuxtConfig({
   supabase: {
     url: process.env.VITE_SUPABASE_URL,
     key: process.env.VITE_SUPABASE_KEY,
-    redirect: false,
-    // redirectOptions: {
-    //   login: "/login",
-    //   callback: "",
-    //   include: undefined,
-    //   exclude: [],
-    //   cookieRedirect: false,
-    // },
-    // cookieOptions: {
-    //   maxAge: 60 * 60 * 8,
-    //   sameSite: "lax",
-    //   secure: true,
-    // },
+    redirect: true,
+    redirectOptions: {
+      login: "/login",
+      callback: "/",
+      include: undefined,
+      exclude: [],
+      cookieRedirect: false,
+    },
+    cookieOptions: {
+      maxAge: 60 * 60 * 8,
+      sameSite: "lax",
+      secure: true,
+    },
   },
 });
