@@ -4,21 +4,32 @@ import Dropdown from "@/components/dashboard/Dropdown.vue";
 import ColumnChart from "@/components/dashboard/ColumnChart.vue";
 import News from "@/components/dashboard/News.vue";
 
-const props = defineProps<{
-  title: string;
-  content: string;
-  dataSwapyItem: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    content?: string;
+    dataSwapyItem?: string;
+  }>(),
+  {
+    title: undefined,
+    content: undefined,
+    dataSwapyItem: undefined,
+  },
+);
 
 const emit = defineEmits<{
-  (e: "updateCardData", dataSwapyItem: string, content: string): void;
+  (
+    e: "updateCardData",
+    dataSwapyItem: string | undefined,
+    content: string,
+  ): void;
 }>();
 
 const setContent = ref(props.content);
 
 const updateContent = (content: string) => {
   setContent.value = content;
-  emit("updateCardData", props.dataSwapyItem, content);
+  emit("updateCardData", props.dataSwapyItem!, content);
 };
 
 // watch for content changes
