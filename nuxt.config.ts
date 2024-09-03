@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/image",
     "@nuxt/devtools",
+    "@nuxtjs/supabase",
   ],
 
   // tailwind: https://nuxt.com/docs/getting-started/configuration#external-configuration-files
@@ -57,5 +58,24 @@ export default defineNuxtConfig({
         external: ["vue/server-renderer"],
       },
     },
+  },
+
+  // supabase
+  supabase: {
+    url: process.env.VITE_SUPABASE_URL,
+    key: process.env.VITE_SUPABASE_KEY,
+    redirect: false,
+    // redirectOptions: {
+    //   login: "/login",
+    //   callback: "",
+    //   include: undefined,
+    //   exclude: [],
+    //   cookieRedirect: false,
+    // },
+    // cookieOptions: {
+    //   maxAge: 60 * 60 * 8,
+    //   sameSite: "lax",
+    //   secure: true,
+    // },
   },
 });
