@@ -4,6 +4,7 @@ import { onClickOutside } from "@vueuse/core";
 
 const route = useRoute();
 const store = useStore();
+const client = useSupabaseClient();
 const user = useSupabaseUser();
 
 /************************
@@ -33,9 +34,15 @@ onClickOutside(target, (event) => (isProfileCardOpen.value = false));
 /************************
  * add userData into store
  *************************/
-onMounted(() => {
+onMounted(async () => {
+  const userId = user.value?.id;
+  const { data, error } = await client
+    .from("profiles")
+    .select("name")
+    .eq("id", userId);
+
   store.userData = {
-    name: user.value?.user_metadata.name,
+    name: (data && data[0]?.name) || user.value?.user_metadata.name,
     email: user.value?.user_metadata.email,
     picture: user.value?.user_metadata.picture,
   };

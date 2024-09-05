@@ -7,7 +7,14 @@ type User = {
 };
 
 export const useStore = defineStore("sidebar", () => {
+  /************************************************
+   * Sidebar state
+   *************************************************/
   const isSidebarOpen = ref<boolean>(true);
+
+  /************************************************
+   * user's data
+   *************************************************/
   const userData = ref<User>({
     name: "",
     email: "",
