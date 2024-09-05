@@ -11,11 +11,11 @@ import { useLayout } from "@/utils/useLayout";
 import { useStyledLog } from "@/utils/useStyledLog";
 
 definePageMeta({
-  title: "sitemap",
+  title: "created-sitemap",
 });
 
 useHead({
-  title: "sitemap",
+  title: "created-sitemap",
 });
 
 /************************************************
