@@ -57,7 +57,7 @@ onMounted(async () => {
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="relative flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
-          <AppBreadCrumb />
+          <!-- <AppBreadCrumb /> -->
         </div>
         <div class="flex items-center">
           <div class="ms-3 flex items-center">
