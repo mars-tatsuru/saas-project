@@ -7,6 +7,8 @@ import {
   useNodesData,
 } from "@vue-flow/core";
 
+const client = useSupabaseClient();
+
 const props = defineProps({
   id: {
     type: String,
@@ -58,6 +60,11 @@ const collapse = () => {
 const expand = () => {
   emit("expandNode", props.id);
 };
+
+const getImageFromSupabaseStorage = (thumbnailPath: string) => {
+  const { data } = client.storage.from("thumbnail").getPublicUrl(thumbnailPath);
+  return data.publicUrl;
+};
 </script>
 
 <template>
@@ -69,7 +76,7 @@ const expand = () => {
     <div class="mb-2 w-full">
       <NuxtImg
         v-if="props.data.thumbnailPath"
-        :src="props.data.thumbnailPath"
+        :src="getImageFromSupabaseStorage(props.data.thumbnailPath)"
         :alt="props.data.title"
         class="w-full"
         quality="60"
