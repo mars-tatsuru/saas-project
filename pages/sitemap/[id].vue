@@ -195,11 +195,6 @@ onPaneReady(async (vueFlowInstance) => {
     edges.value = specificEdges;
   });
 
-  // fit the view to the graph
-  vueFlowInstance.fitView({
-    nodes: [nodes.value[0].id],
-  });
-
   nextTick(() => {
     useStyledLog("3. nextTick(finish dom update)");
     // get the first node and calculate the center of the node
@@ -212,24 +207,28 @@ onPaneReady(async (vueFlowInstance) => {
     );
 
     if (clientRect) {
-      // set to the first node
+      // set the viewport to the center of the first node
       // setViewport(
       //   {
-      //     x: -clientRect.x / 2 + windowWidth / 2 - 200, // 200 is width of the node
-      //     y: clientRect.y - windowHeight / maxNodeLevel + 50, // windowHeight / maxNodeLevel is the height of the node rendered
+      //     x: 0,
+      //     y: 0,
       //     zoom: 0.5,
       //   },
       //   { duration: 1000 },
       // );
-      setViewport(
-        {
-          x: -clientRect.x / 2 + windowWidth / 2 - 200, // 200 is width of the node
-          y: windowHeight / maxNodeLevel - 100, // windowHeight / maxNodeLevel is the height of the node rendered
-          zoom: 0.5,
-        },
-        { duration: 1000 },
-      );
     }
+
+    // fit the view to the graph
+    setTimeout(() => {
+      vueFlowInstance.fitView({
+        nodes: [nodes.value[0].id],
+        offset: { x: 0, y: -200 },
+        duration: 1000,
+        minZoom: 0.5,
+        maxZoom: 1,
+        includeHiddenNodes: false,
+      });
+    }, 0);
   });
 
   useStyledLog("4.zoomed");
