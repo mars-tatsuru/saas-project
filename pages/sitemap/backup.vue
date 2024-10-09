@@ -1,41 +1,41 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { VueFlow, useVueFlow, useNodesInitialized } from "@vue-flow/core";
-import type { Node, Edge } from "@vue-flow/core";
-import { Background } from "@vue-flow/background";
-import { MiniMap } from "@vue-flow/minimap";
-import tree from "@/data/site_tree.json";
-import FlowNode from "@/components/sitemap/FlowNode.vue";
-import FlowEdge from "@/components/sitemap/FlowEdge.vue";
-import { useLayout } from "@/utils/useLayout";
-import { useStyledLog } from "@/utils/useStyledLog";
+import { ref } from 'vue';
+import { VueFlow, useVueFlow, useNodesInitialized } from '@vue-flow/core';
+import type { Node, Edge } from '@vue-flow/core';
+import { Background } from '@vue-flow/background';
+import { MiniMap } from '@vue-flow/minimap';
+import tree from '@/data/site_tree.json';
+import FlowNode from '@/components/sitemap/FlowNode.vue';
+import FlowEdge from '@/components/sitemap/FlowEdge.vue';
+import { useLayout } from '@/utils/useLayout';
+import { useStyledLog } from '@/utils/useStyledLog';
 
 definePageMeta({
-  title: "created-sitemap",
+	title: 'created-sitemap',
 });
 
 useHead({
-  title: "created-sitemap",
+	title: 'created-sitemap',
 });
 
 /************************************************
  * Determine if the user is logged in
  *************************************************/
 definePageMeta({
-  middleware: "auth",
+	middleware: 'auth',
 });
 
 /************************************************
  * Sitemap
  *************************************************/
 type TreeNode = {
-  level?: number;
-  thumbnailPath?: string;
-  title?: string;
-  url?: string;
-  x?: number;
-  y?: number;
-  [key: string]: any; // To include children nodes
+	level?: number;
+	thumbnailPath?: string;
+	title?: string;
+	url?: string;
+	x?: number;
+	y?: number;
+	[key: string]: any; // To include children nodes
 };
 
 // use for checking if the nodes are initialized
@@ -45,70 +45,70 @@ const nodesInitialized = useNodesInitialized();
 /************************************************
  * HELPER FUNCTIONS for creating Node and Edge
  ************************************************/
-//3-1: Create a node
+// 3-1: Create a node
 const createNode = (id: string, value: TreeNode, parentId?: string): Node => ({
-  id,
-  type: "custom",
-  position: {
-    x: value.x || 0,
-    y: value.y || 0,
-  },
-  data: {
-    title: value.title,
-    level: value.level,
-    url: value.url,
-    thumbnailPath: value.thumbnailPath,
-  },
+	id,
+	type: 'custom',
+	position: {
+		x: value.x || 0,
+		y: value.y || 0,
+	},
+	data: {
+		title: value.title,
+		level: value.level,
+		url: value.url,
+		thumbnailPath: value.thumbnailPath,
+	},
 });
 
 // 3-2: Create an edge
 const createEdge = (sourceId: string, targetId: string) => ({
-  id: `${sourceId}-${targetId}`,
-  type: "custom",
-  source: sourceId,
-  target: targetId,
+	id: `${sourceId}-${targetId}`,
+	type: 'custom',
+	source: sourceId,
+	target: targetId,
 });
 
 // 1: create data for sitemap rendering
 const processData = (data: { [key: string]: TreeNode }, parentId?: string) => {
-  let nodes: Node[] = [];
-  let edges: Edge[] = [];
+	let nodes: Node[] = [];
+	let edges: Edge[] = [];
 
-  // 3
-  const processEntry = (key: string, value: TreeNode, processId?: string) => {
-    const nodeId = processId ? `${processId}-${key}` : `${key}`;
+	// 3
+	const processEntry = (key: string, value: TreeNode, processId?: string) => {
+		const nodeId = processId ? `${processId}-${key}` : `${key}`;
 
-    if (value.url) {
-      nodes.push(createNode(nodeId, value, processId));
-    }
+		if (value.url) {
+			nodes.push(createNode(nodeId, value, processId));
+		}
 
-    if (processId) {
-      edges.push(createEdge(`${processId}`, `${processId}-${key}`));
-    }
+		if (processId) {
+			edges.push(createEdge(`${processId}`, `${processId}-${key}`));
+		}
 
-    // Recursively process children
-    Object.entries(value).map(([childKey, childValue]) => {
-      if (
-        !["url", "title", "thumbnailPath", "level", "x", "y"].includes(childKey)
-      ) {
-        // 6 Recursion
-        const childProcessResult = processData(
-          { [childKey]: childValue },
-          nodeId,
-        );
+		// Recursively process children
+		Object.entries(value).map(([childKey, childValue]) => {
+			if (
+				!['url', 'title', 'thumbnailPath', 'level', 'x', 'y'].includes(childKey)
+			) {
+				// 6 Recursion
+				const childProcessResult = processData(
+					{ [childKey]: childValue },
+					nodeId,
+				);
 
-        nodes = nodes.concat(childProcessResult.nodes);
-        edges = edges.concat(childProcessResult.edges);
-      }
-    });
-  };
+				nodes = nodes.concat(childProcessResult.nodes);
+				edges = edges.concat(childProcessResult.edges);
+			}
+		});
+	};
 
-  // 2
-  Object.entries(data).map(([key, value]) => {
-    processEntry(key, value, parentId);
-  });
+	// 2
+	Object.entries(data).map(([key, value]) => {
+		processEntry(key, value, parentId);
+	});
 
-  return { nodes, edges };
+	return { nodes, edges };
 };
 
 /************************************************
@@ -116,7 +116,7 @@ const processData = (data: { [key: string]: TreeNode }, parentId?: string) => {
  ************************************************/
 const { graph, layout, previousDirection } = useLayout();
 const layoutGraph = async (direction: string) => {
-  nodes.value = layout(nodes.value, edges.value, direction);
+	nodes.value = layout(nodes.value, edges.value, direction);
 };
 
 /**************************************************************
@@ -126,17 +126,17 @@ const layoutGraph = async (direction: string) => {
  * 3. the internal state of the VueFlow instance (like `nodes`, `edges`, `viewport`, etc)
  *************************************************************/
 const {
-  fitView,
-  onPaneReady,
-  onInit,
-  onNodeDragStop,
-  onConnect,
-  addEdges,
-  setViewport,
-  toObject,
-  onNodesChange,
-  findEdge,
-  updateEdge,
+	fitView,
+	onPaneReady,
+	onInit,
+	onNodeDragStop,
+	onConnect,
+	addEdges,
+	setViewport,
+	toObject,
+	onNodesChange,
+	findEdge,
+	updateEdge,
 } = useVueFlow();
 
 // initial data
@@ -152,51 +152,51 @@ const edges = ref(initialEdges);
  * onPaneReady is called when the VueFlow pane is ready (PANE_READY event)
  ***********************************************************************/
 onBeforeMount(() => {
-  useStyledLog("-1. onBeforeMount");
+	useStyledLog('-1. onBeforeMount');
 });
 
 onMounted(() => {
-  useStyledLog("0. onMounted");
-  isReadyRender.value = true;
+	useStyledLog('0. onMounted');
+	isReadyRender.value = true;
 });
 
 onInit(async (vueFlowInstance) => {
-  useStyledLog("1. onInit");
+	useStyledLog('1. onInit');
 });
 
 onPaneReady(async (vueFlowInstance) => {
-  useStyledLog("2. onPaneReady");
+	useStyledLog('2. onPaneReady');
 
-  // fit the view to the graph
-  vueFlowInstance.fitView({
-    nodes: [nodes.value[0].id],
-  });
+	// fit the view to the graph
+	vueFlowInstance.fitView({
+		nodes: [nodes.value[0].id],
+	});
 
-  nextTick(() => {
-    useStyledLog("3. nextTick(finish dom update)");
-    // get the first node and calculate the center of the node
-    const firstNode = nodes.value[0];
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const clientRect = firstNode?.position;
-    const maxNodeLevel = Math.max(
-      ...nodes.value.map((node) => node.data.level),
-    );
+	nextTick(() => {
+		useStyledLog('3. nextTick(finish dom update)');
+		// get the first node and calculate the center of the node
+		const firstNode = nodes.value[0];
+		const windowWidth = window.innerWidth;
+		const windowHeight = window.innerHeight;
+		const clientRect = firstNode?.position;
+		const maxNodeLevel = Math.max(
+			...nodes.value.map(node => node.data.level),
+		);
 
-    if (clientRect) {
-      // set to the first node
-      setViewport(
-        {
-          x: -clientRect.x / 2 + windowWidth / 2 - 200, // 200 is width of the node
-          y: clientRect.y - windowHeight / maxNodeLevel + 50, // windowHeight / maxNodeLevel is the height of the node rendered
-          zoom: 0.5,
-        },
-        { duration: 1000 },
-      );
-    }
-  });
+		if (clientRect) {
+			// set to the first node
+			setViewport(
+				{
+					x: -clientRect.x / 2 + windowWidth / 2 - 200, // 200 is width of the node
+					y: clientRect.y - windowHeight / maxNodeLevel + 50, // windowHeight / maxNodeLevel is the height of the node rendered
+					zoom: 0.5,
+				},
+				{ duration: 1000 },
+			);
+		}
+	});
 
-  useStyledLog("4.zoomed");
+	useStyledLog('4.zoomed');
 });
 
 /************************************************************************
@@ -209,7 +209,7 @@ onPaneReady(async (vueFlowInstance) => {
  * 4. any intersections with other nodes
  ***********************************************************************/
 onNodeDragStop(({ event, nodes, node }) => {
-  console.log("Node Drag Stop", { event, nodes, node });
+	console.log('Node Drag Stop', { event, nodes, node });
 });
 
 /**************************************************************
@@ -218,7 +218,7 @@ onNodeDragStop(({ event, nodes, node }) => {
  * You can add additional properties to your new edge (like a type or label) or block the creation altogether by not calling `addEdges`
  *************************************************************/
 onConnect((connection) => {
-  addEdges(connection);
+	addEdges(connection);
 });
 
 /********************************************************************************
@@ -228,29 +228,29 @@ onConnect((connection) => {
  * 3. Create a new array of nodes and pass it to the `nodes` ref
  ********************************************************************************/
 function updatePos() {
-  nodes.value = nodes.value.map((node: any) => {
-    return {
-      ...node,
-      position: {
-        x: Math.random() * 400,
-        y: Math.random() * 400,
-      },
-    };
-  });
+	nodes.value = nodes.value.map((node: any) => {
+		return {
+			...node,
+			position: {
+				x: Math.random() * 400,
+				y: Math.random() * 400,
+			},
+		};
+	});
 }
 
 /**********************************************************************************
  * toObject transforms your current graph data to an easily persist-able object
  *********************************************************************************/
 function logToObject() {
-  console.log(toObject());
+	console.log(toObject());
 }
 
 /***********************************************************************
  * Resets the current viewport transformation (zoom & pan)
  ***********************************************************************/
 function resetTransform() {
-  setViewport({ x: 0, y: 0, zoom: 1 });
+	setViewport({ x: 0, y: 0, zoom: 1 });
 }
 
 /***********************************************************************
@@ -259,153 +259,157 @@ function resetTransform() {
 // our dark mode toggle flag
 const dark = ref(false);
 function toggleDarkMode() {
-  dark.value = !dark.value;
+	dark.value = !dark.value;
 }
 
 /***********************************************************************
  * Collapse the nodes
  ***********************************************************************/
 const collapseNode = (filterNodesPosition: any) => {
-  // Get the same nodes and change the position
-  const sameIdNodes = nodes.value.map((node: any, index: number) => {
-    if (node.id.includes(filterNodesPosition[0].id)) {
-      // avoid the error of using the id as querySelector
-      const escapedId = CSS.escape(node.id);
-      const theNode = document.querySelector(
+	// Get the same nodes and change the position
+	const sameIdNodes = nodes.value.map((node: any, index: number) => {
+		if (node.id.includes(filterNodesPosition[0].id)) {
+			// avoid the error of using the id as querySelector
+			const escapedId = CSS.escape(node.id);
+			const theNode = document.querySelector(
         `[data-id=${escapedId}]`,
-      ) as HTMLElement;
+			) as HTMLElement;
 
-      if (theNode && node.position?.x !== 0) {
-        theNode.style.transform = `translate(${node.position?.x + index}px, ${node.position?.y + index}px)`;
-        theNode.style.transition = "transform 300ms ease-out";
-      } else if (theNode) {
-        theNode.style.transform = "";
-        theNode.style.transition = "";
-      }
+			if (theNode && node.position?.x !== 0) {
+				theNode.style.transform = `translate(${node.position?.x + index}px, ${node.position?.y + index}px)`;
+				theNode.style.transition = 'transform 300ms ease-out';
+			}
+			else if (theNode) {
+				theNode.style.transform = '';
+				theNode.style.transition = '';
+			}
 
-      return {
-        ...node,
-        data: {
-          ...node.data,
-        },
-        position: {
-          x:
+			return {
+				...node,
+				data: {
+					...node.data,
+				},
+				position: {
+					x:
             node.id === filterNodesPosition[0].id
-              ? filterNodesPosition[0].x
-              : filterNodesPosition[0].x + index,
-          y:
+            	? filterNodesPosition[0].x
+            	: filterNodesPosition[0].x + index,
+					y:
             node.id === filterNodesPosition[0].id
-              ? filterNodesPosition[0].y
-              : filterNodesPosition[0].y + index,
-        },
-      };
-    }
-    return node;
-  });
+            	? filterNodesPosition[0].y
+            	: filterNodesPosition[0].y + index,
+				},
+			};
+		}
+		return node;
+	});
 
-  nodes.value = sameIdNodes;
+	nodes.value = sameIdNodes;
 
-  // remove transition after 300ms
-  setTimeout(() => {
-    removeTransitionStyle();
-  }, 300);
+	// remove transition after 300ms
+	setTimeout(() => {
+		removeTransitionStyle();
+	}, 300);
 };
 
 /***********************************************************************
  * Expand the nodes
  ***********************************************************************/
 const expandNode = (nodeId: string) => {
-  // Get the position from localStorage
-  const expandPositions = JSON.parse(localStorage.getItem(nodeId) || "[]");
+	// Get the position from localStorage
+	const expandPositions = JSON.parse(localStorage.getItem(nodeId) || '[]');
 
-  // Get the same nodes and change the position
-  expandPositions.forEach((expandPosition: any) => {
-    const sameIdNodes = nodes.value.map((node: any) => {
-      if (node.id.includes(expandPosition.id)) {
-        // avoid the error of using the id as querySelector
-        const escapedId = CSS.escape(node.id);
-        const theNode = document.querySelector(
+	// Get the same nodes and change the position
+	expandPositions.forEach((expandPosition: any) => {
+		const sameIdNodes = nodes.value.map((node: any) => {
+			if (node.id.includes(expandPosition.id)) {
+				// avoid the error of using the id as querySelector
+				const escapedId = CSS.escape(node.id);
+				const theNode = document.querySelector(
           `[data-id=${escapedId}]`,
-        ) as HTMLElement;
+				) as HTMLElement;
 
-        if (theNode) {
-          theNode.style.transform = `translate(${expandPosition.x}px, ${expandPosition.y}px)`;
-          theNode.style.transition = "transform 300ms ease-out";
-        }
+				if (theNode) {
+					theNode.style.transform = `translate(${expandPosition.x}px, ${expandPosition.y}px)`;
+					theNode.style.transition = 'transform 300ms ease-out';
+				}
 
-        return {
-          ...node,
-          data: {
-            ...node.data,
-          },
-          position: {
-            x: expandPosition.x,
-            y: expandPosition.y,
-          },
-        };
-      }
-      return node;
-    });
+				return {
+					...node,
+					data: {
+						...node.data,
+					},
+					position: {
+						x: expandPosition.x,
+						y: expandPosition.y,
+					},
+				};
+			}
+			return node;
+		});
 
-    nodes.value = sameIdNodes;
-    localStorage.removeItem(nodeId);
-  });
+		nodes.value = sameIdNodes;
+		localStorage.removeItem(nodeId);
+	});
 
-  // remove transition after 300ms
-  setTimeout(() => {
-    removeTransitionStyle();
-  }, 300);
+	// remove transition after 300ms
+	setTimeout(() => {
+		removeTransitionStyle();
+	}, 300);
 };
 
 // HELPER FUNCTION
 const removeTransitionStyle = () => {
-  const allNodes = document.querySelectorAll(
-    ".vue-flow__node",
-  ) as NodeListOf<HTMLElement>;
+	const allNodes = document.querySelectorAll(
+		'.vue-flow__node',
+	) as NodeListOf<HTMLElement>;
 
-  allNodes.forEach((node) => {
-    node.style.transition = "unset";
-  });
+	allNodes.forEach((node) => {
+		node.style.transition = 'unset';
+	});
 };
 </script>
 
 <template>
-  <!-- vue flow -->
-  <div class="h-[calc(100vh-5.5rem)] w-full">
-    <ClientOnly>
-      <VueFlow
-        v-show="isReadyRender"
-        :nodes="nodes"
-        :edges="edges"
-        :class="{ dark }"
-        @nodesInitialized="layoutGraph('TB')"
-      >
-        <Background pattern-color="#aaa" :gap="16" />
+	<!-- vue flow -->
+	<div class="h-[calc(100vh-5.5rem)] w-full">
+		<ClientOnly>
+			<VueFlow
+				v-show="isReadyRender"
+				:nodes="nodes"
+				:edges="edges"
+				:class="{ dark }"
+				@nodes-initialized="layoutGraph('TB')"
+			>
+				<Background
+					pattern-color="#aaa"
+					:gap="16"
+				/>
 
-        <template #node-custom="customNodeProps">
-          <FlowNode
-            :id="customNodeProps.id"
-            :data="customNodeProps.data"
-            :nodes="nodes"
-            @collapseNode="collapseNode"
-            @expandNode="expandNode"
-          />
-        </template>
+				<template #node-custom="customNodeProps">
+					<FlowNode
+						:id="customNodeProps.id"
+						:data="customNodeProps.data"
+						:nodes="nodes"
+						@collapse-node="collapseNode"
+						@expand-node="expandNode"
+					/>
+				</template>
 
-        <template #edge-custom="customEdgeProps">
-          <FlowEdge
-            :id="customEdgeProps.id"
-            :source-x="customEdgeProps.sourceX"
-            :source-y="customEdgeProps.sourceY"
-            :target-x="customEdgeProps.targetX"
-            :target-y="customEdgeProps.targetY"
-          />
-        </template>
+				<template #edge-custom="customEdgeProps">
+					<FlowEdge
+						:id="customEdgeProps.id"
+						:source-x="customEdgeProps.sourceX"
+						:source-y="customEdgeProps.sourceY"
+						:target-x="customEdgeProps.targetX"
+						:target-y="customEdgeProps.targetY"
+					/>
+				</template>
 
-        <MiniMap />
-      </VueFlow>
-    </ClientOnly>
-  </div>
+				<MiniMap />
+			</VueFlow>
+		</ClientOnly>
+	</div>
 </template>
 
 <style>

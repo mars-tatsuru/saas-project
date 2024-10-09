@@ -1,25 +1,25 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 type User = {
-  name: string;
-  email: string;
-  picture: string;
+	name: string;
+	email: string;
+	picture: string;
 };
 
-export const useStore = defineStore("sidebar", () => {
-  /************************************************
+export const useStore = defineStore('sidebar', () => {
+	/************************************************
    * Sidebar state
    *************************************************/
-  const isSidebarOpen = ref<boolean>(true);
+	const isSidebarOpen = ref<boolean>(true);
 
-  /************************************************
+	/************************************************
    * user's data
    *************************************************/
-  const userData = ref<User>({
-    name: "",
-    email: "",
-    picture: "",
-  });
+	const userData = ref<User>({
+		name: '',
+		email: '',
+		picture: '',
+	});
 
-  return { isSidebarOpen, userData };
+	return { isSidebarOpen, userData };
 });
