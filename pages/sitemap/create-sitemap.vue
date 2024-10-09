@@ -36,7 +36,7 @@ const startCrawling = async () => {
 
 	try {
 		const response = await fetch(
-      `http://0.0.0.0:8000/crawl?userId=${user.value.id}&siteUrl=${siteUrl.value}`,
+      `http://0.0.0.0:8000/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
       { method: 'GET' },
 		);
 

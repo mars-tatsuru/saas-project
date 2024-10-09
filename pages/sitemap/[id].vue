@@ -11,6 +11,14 @@ import { useLayout } from '@/utils/useLayout';
 import { useStyledLog } from '@/utils/useStyledLog';
 
 const client = useSupabaseClient();
+const user = useSupabaseUser();
+const router = useRouter();
+
+// const checkAuth = () => {
+// 	if (!user.value) {
+// 		router.push('/login');
+// 	}
+// };
 
 definePageMeta({
 	title: 'created-sitemap',
@@ -147,10 +155,14 @@ const {
 const getSpecificCrawlDataFromSupabase = async () => {
 	const { data, error } = await client
 		.from('crawl_data')
-		.select('json_data')
+		.select('*')
 		.eq('id', params.id);
 
-	// crawlDataList.value = data || [];
+	// Auth check
+	if (data && data[0]?.user_id !== user.value?.id) {
+		router.push('/sitemap');
+		return;
+	}
 
 	if (error) {
 		console.error('Failed to fetch user data:', error);
@@ -177,7 +189,6 @@ onBeforeMount(() => {
 
 onMounted(async () => {
 	useStyledLog('0. onMounted');
-	isReadyRender.value = true;
 });
 
 onInit(async (vueFlowInstance) => {
@@ -194,6 +205,8 @@ onPaneReady(async (vueFlowInstance) => {
 		nodes.value = specificNodes;
 		edges.value = specificEdges;
 	});
+
+	isReadyRender.value = true;
 
 	nextTick(() => {
 		useStyledLog('3. nextTick(finish dom update)');
