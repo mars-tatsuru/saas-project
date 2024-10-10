@@ -37,6 +37,7 @@ const startCrawling = async () => {
 	try {
 		const response = await fetch(
       `http://0.0.0.0:8000/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
+      // `https://crawl-project--backend.fly.dev/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
       { method: 'GET' },
 		);
 
