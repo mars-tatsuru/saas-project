@@ -4,7 +4,7 @@ import { VueFlow, useVueFlow, useNodesInitialized } from '@vue-flow/core';
 import type { Node, Edge } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { MiniMap } from '@vue-flow/minimap';
-import tree from '@/data/site_tree.json';
+// import tree from '@/data/site_tree.json';
 import FlowNode from '@/components/sitemap/FlowNode.vue';
 import FlowEdge from '@/components/sitemap/FlowEdge.vue';
 import { useLayout } from '@/utils/useLayout';
