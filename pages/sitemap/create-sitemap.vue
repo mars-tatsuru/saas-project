@@ -19,6 +19,8 @@ const crawlResult = ref<any>(null);
 const testImageUrl = ref<string | null>(null);
 const router = useRouter();
 
+const VITE_CRAWL_API = import.meta.env.VITE_CRAWL_API;
+
 const startCrawling = async () => {
 	if (!user.value?.id) {
 		errorMessage.value = 'User not authenticated';
@@ -36,8 +38,7 @@ const startCrawling = async () => {
 
 	try {
 		const response = await fetch(
-      // `http://0.0.0.0:8000/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
-      `https://crawl-project--backend.fly.dev/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
+      `${VITE_CRAWL_API}/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
       { method: 'GET' },
 		);
 

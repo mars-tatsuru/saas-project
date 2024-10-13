@@ -52,8 +52,6 @@ const getDataFromSupabase = async () => {
 		console.error('Failed to fetch user data:', error);
 		return;
 	}
-
-	console.log('User data:', data);
 };
 
 /***********************************************
@@ -61,8 +59,6 @@ const getDataFromSupabase = async () => {
  ***********************************************/
 const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 	const { data } = client.storage.from('thumbnail').getPublicUrl(thumbnailPath);
-
-	console.log('thumbnailPath:', data.publicUrl);
 
 	return data.publicUrl;
 };
