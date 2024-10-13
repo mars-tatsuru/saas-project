@@ -45,7 +45,11 @@ const onCrawlSubmit = async () => {
 	try {
 		const response = await fetch(
 			`${VITE_CRAWL_API}/crawl?siteUrl=${siteUrl.value}&userId=${user.value.id}`,
-			{ method: 'GET' },
+			{
+				method: 'GET',
+				credentials: 'include',
+				mode: 'cors',
+			},
 		);
 
 		if (!response.ok) {
