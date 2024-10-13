@@ -57,6 +57,9 @@ const onCrawlSubmit = async () => {
 			description: 'サイトマップ作成リクエストを受け付けました。',
 			variant: 'success',
 		});
+
+		isLoading.value = false;
+		siteUrl.value = '';
 	}
 	catch (error) {
 		console.error('Crawling failed:', error);
@@ -68,10 +71,6 @@ const onCrawlSubmit = async () => {
 			description: 'サイトマップ作成リクエストに失敗しました。再度お試しください。',
 			variant: 'destructive',
 		});
-	}
-	finally {
-		isLoading.value = false;
-		siteUrl.value = '';
 	}
 };
 </script>
@@ -102,9 +101,10 @@ const onCrawlSubmit = async () => {
 						<FormLabel>クロール対象URL</FormLabel>
 						<FormControl>
 							<Input
+								v-bind="componentField"
+								v-model="siteUrl"
 								type="text"
 								placeholder="https://example.com"
-								v-bind="componentField"
 							/>
 						</FormControl>
 						<FormDescription>
@@ -117,7 +117,7 @@ const onCrawlSubmit = async () => {
 					type="submit"
 					class="bg-gradient-to-r from-[#4B81F5] to-[#2C4B8F] dark:from-white dark:to-white"
 				>
-					サイトマップを作成
+					{{ isLoading ? 'リクエスト中...' : 'サイトマップ作成' }}
 				</Button>
 			</Form>
 		</div>

@@ -2,13 +2,10 @@
 import { onClickOutside, useColorMode } from '@vueuse/core';
 import { Icon } from '@iconify/vue';
 import { useStore } from '@/stores/index';
-import { useToast } from '@/components/ui/toast/use-toast';
 
-const route = useRoute();
 const store = useStore();
 const client = useSupabaseClient();
 const user = useSupabaseUser();
-const { toast } = useToast();
 
 /************************
  * add userData into store
