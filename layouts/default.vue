@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AppHeader from '@/components/AppHeader.vue';
-import AppSidebar from '@/components/AppSidebar.vue';
+import AppHeader from '~/components/layout/AppHeader.vue';
+import AppSidebar from '~/components/layout/AppSidebar.vue';
 import { useStore } from '@/stores/index';
 
 const route = useRoute();
@@ -19,7 +19,7 @@ watch(
 </script>
 
 <template>
-	<div class="whole bg-white dark:bg-black">
+	<div class="bg-white dark:bg-black">
 		<!-- Sidebar -->
 		<AppSidebar class="hidden md:grid" />
 
@@ -29,10 +29,10 @@ watch(
 		<!-- Main -->
 		<div
 			ref="main"
-			class="ml-auto min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 md:w-[calc(100%-16rem)] md:p-4 dark:bg-slate-900"
+			class="ml-auto min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 dark:bg-black md:w-[calc(100%-16rem)] md:p-4 md:pt-20"
 		>
 			<div
-				class="mt-14 hidden min-h-[calc(100vh-5.5rem)] w-full md:block dark:border-gray-700"
+				class="hidden min-h-[calc(100vh-5.5rem)] w-full dark:border-gray-700 md:block"
 			>
 				<slot />
 			</div>

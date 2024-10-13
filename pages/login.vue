@@ -32,17 +32,20 @@ const login = async (providerName: 'google' | 'github') => {
 	<div
 		class="relative z-10 flex h-full max-w-none flex-col items-center justify-center gap-5"
 	>
-		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-			Login
-		</h1>
-		<div class="">
-			<button
-				class="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				type="button"
-				@click="login('google')"
-			>
-				Login with Google
-			</button>
-		</div>
+		<Card class="w-full dark:bg-slate-900 md:max-w-xl">
+			<CardHeader>
+				<CardTitle>SaaS Kit</CardTitle>
+				<CardDescription>ログインしてください</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<Button
+					class="w-full"
+					type="button"
+					@click="login('google')"
+				>
+					Login with Google
+				</Button>
+			</CardContent>
+		</Card>
 	</div>
 </template>

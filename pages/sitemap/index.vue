@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 
@@ -67,73 +69,64 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 <template>
 	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
 		<!-- header -->
-		<div
-			class="sticky top-16 z-40 mb-3 flex items-center justify-between rounded-md border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-slate-800"
-		>
-			<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-				site map
-			</h1>
-			<NuxtLink
-				to="/sitemap/create-sitemap"
-				class="inline-flex items-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-			>
-				created-sitemap page
-			</NuxtLink>
-		</div>
+		<PageHeader
+			title="site map"
+			href="/sitemap/create-sitemap"
+			label="サイトマップを作成"
+		/>
 
 		<!-- card list  -->
-		<div class="grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
-			<div
+		<div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
+			<Card
 				v-for="crawlData in crawlDataList"
 				:key="crawlData.id"
-				class="grid grid-rows-[auto_1fr] rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800"
+				class="grid grid-rows-[auto_1fr] dark:bg-slate-900"
 			>
-				<div class="relative h-52 w-full overflow-hidden">
-					<NuxtImg
-						:src="getImageFromSupabaseStorage(crawlData.thumbnail_path)"
-						alt="サムネイル"
-						class="absolute inset-0 size-full rounded-t-lg object-cover"
-					/>
-				</div>
-				<div class="flex flex-col justify-between p-5">
-					<div class="break-all">
-						<a
-							:href="crawlData.site_url"
-							target="_blank"
-						>
-							<h5
-								class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-							>
-								{{ crawlData.site_url }}
-							</h5>
-						</a>
-						<p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-							{{ crawlData.created_at }}
-						</p>
+				<CardContent
+					class="p-0"
+				>
+					<div class="relative h-52 w-full overflow-hidden">
+						<NuxtImg
+							:src="getImageFromSupabaseStorage(crawlData.thumbnail_path)"
+							alt="サムネイル"
+							class="absolute inset-0 size-full rounded-t-lg object-cover"
+						/>
 					</div>
-					<NuxtLink
-						:to="`/sitemap/${crawlData.id}`"
-						class="inline-flex w-fit items-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					<div class="flex flex-col justify-between p-3">
+						<div class="flex flex-col gap-2 break-all">
+							<a
+								:href="crawlData.site_url"
+								target="_blank"
+							>
+								<h5
+									class="line-clamp-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+								>
+									{{ crawlData.site_url }}
+								</h5>
+							</a>
+							<p class="font-normal text-gray-700 dark:text-gray-400">
+								{{ crawlData.created_at }}
+							</p>
+						</div>
+					</div>
+				</CardContent>
+				<CardFooter
+					class="items-end justify-center p-3"
+				>
+					<Button
+						as-child
+						class="relative"
+						variant="link"
 					>
-						sitemapをみる
-						<svg
-							class="ms-2 size-3.5 rtl:rotate-180"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 14 10"
+						<NuxtLink
+							:to="`/sitemap/${crawlData.id}`"
+							class="flex items-center justify-center gap-3 font-bold underline"
 						>
-							<path
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M1 5h12m0 0L9 1m4 4L9 9"
-							/>
-						</svg>
-					</NuxtLink>
-				</div>
-			</div>
+							サイトマップを見る
+						</NuxtLink>
+					</Button>
+				</CardFooter>
+			</Card>
 		</div>
 	</div>
 </template>

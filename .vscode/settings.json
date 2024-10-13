@@ -1,5 +1,10 @@
 {
-  "cSpell.words": ["Dagre", "swapy", "xaxis"],
+  "cSpell.words": [
+    "crawlurl",
+    "Dagre",
+    "swapy",
+    "xaxis"
+  ],
 
   // prettier
   "prettier.enable": false,

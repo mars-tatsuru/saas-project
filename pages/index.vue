@@ -20,7 +20,5 @@ definePageMeta({
 		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
 			HOME
 		</h1>
-		<Button>aaaaa</Button>
-		<Input />
 	</div>
 </template>

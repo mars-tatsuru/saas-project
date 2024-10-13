@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useToast } from '@/components/ui/toast/use-toast';
+
 definePageMeta({
 	title: 'Setting',
 });
@@ -10,6 +12,7 @@ useHead({
 const store = useStore();
 const client = useSupabaseClient();
 const user = useSupabaseUser();
+const { toast } = useToast();
 
 /************************************************
  * Determine if the user is logged in
@@ -56,12 +59,11 @@ const updateUserName = async (name: string) => {
 			.single();
 
 		if (error) {
+			alert('Failed to update the user profile');
 			throw error;
 		}
-		else {
-			alert('プロフィールを更新しました！');
-			store.userData.name = name || user.value?.user_metadata.name;
-		}
+
+		store.userData.name = name || user.value?.user_metadata.name;
 	}
 	catch (error) {
 		alert(error);
@@ -73,25 +75,46 @@ const updateUserName = async (name: string) => {
 </script>
 
 <template>
-	<div class="container relative z-10 h-full min-h-full max-w-none gap-5">
-		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-			setting
-		</h1>
-		<div class="mt-6 w-full">
-			<div class="flex items-center gap-2">
-				<span class="text-white">Name:</span>
-				<input
-					v-model="inputName"
-					type="text"
-					class="w-64 rounded-md border border-gray-300 p-2 text-sm font-medium text-gray-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-gray-800 dark:text-gray-100"
-				>
-				<button
-					class="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-					@click="updateUserName(inputName)"
-				>
-					{{ loading ? "変更中..." : "変更する" }}
-				</button>
+	<div class="container relative z-10 h-full min-h-full max-w-none gap-5 p-0">
+		<!-- header -->
+		<PageHeader
+			title="Setting"
+			href=""
+			label=""
+		/>
+
+		<!-- content -->
+		<div class="mt-4 min-h-[calc(100vh-12rem)] w-full rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+			<div class="">
+				<h2 class="mb-6 text-xl font-semibold text-gray-800 dark:text-gray-100">
+					Profile
+				</h2>
+				<div class="flex flex-col gap-2">
+					<Label class="text-base">名前</Label>
+					<div class="flex items-center gap-2">
+						<input
+							v-model="inputName"
+							type="text"
+							class="w-full rounded-lg border px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+						>
+						<Button
+
+							@click="async() => {
+								await updateUserName(inputName);
+								toast({
+									title: 'プロフィール更新',
+									description: 'プロフィールが正常に更新されました',
+								});
+							}"
+						>
+							{{ loading ? "変更中..." : "変更する" }}
+						</Button>
+					</div>
+				</div>
 			</div>
 		</div>
+
+		<!-- toast -->
+		<Toaster />
 	</div>
 </template>

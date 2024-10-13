@@ -5,10 +5,14 @@ type ChartOptions = {
 	chart: {
 		type: string;
 	};
+	colors: string[];
 	plotOptions: {
 		bar: {
 			borderRadius: number;
 			borderRadiusApplication: string;
+			style?: {
+				colors: string[];
+			};
 		};
 	};
 	xaxis?: {
@@ -25,6 +29,7 @@ const options = ref<ChartOptions>({
 	chart: {
 		type: 'bar',
 	},
+	colors: ['#000'],
 	plotOptions: {
 		bar: {
 			borderRadius: 5,
