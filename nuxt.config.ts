@@ -30,6 +30,7 @@ export default defineNuxtConfig({
 		'@nuxt/devtools',
 		'@nuxtjs/supabase',
 		'shadcn-nuxt',
+		'@nuxtjs/color-mode',
 	],
 
 	// tailwind: https://nuxt.com/docs/getting-started/configuration#external-configuration-files
