@@ -93,10 +93,10 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 				loading="lazy"
 			/>
 		</div>
-		<h3 class="mb-2 text-xs">
+		<h3 class="mb-2 text-xs dark:text-black">
 			{{ props.data.title }}
 		</h3>
-		<p class="mb-2 text-xs">
+		<p class="mb-2 text-xs dark:text-black">
 			Level: {{ props.data?.level }}
 		</p>
 		<a
@@ -113,17 +113,19 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 		>
 			{{ props.data.url }}
 		</p>
-		<button
-			class="mt-2 rounded-sm border bg-green-600 p-1 text-xs text-white"
-			@click="collapse"
-		>
-			collapse
-		</button>
-		<button
-			class="mt-2 rounded-sm border bg-green-600 p-1 text-xs text-white"
-			@click="expand"
-		>
-			expand
-		</button>
+		<!-- <div class="flex items-center gap-2">
+			<Button
+				class="mt-2 h-fit rounded-sm p-1 text-xs"
+				@click="collapse"
+			>
+				collapse
+			</Button>
+			<Button
+				class="mt-2 h-fit rounded-sm p-1 text-xs"
+				@click="expand"
+			>
+				expand
+			</Button>
+		</div> -->
 	</div>
 </template>
