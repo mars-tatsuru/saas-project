@@ -65,7 +65,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 </script>
 
 <template>
-	<div class="container p-0 relative z-10 h-full max-w-none gap-5">
+	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
 		<!-- header -->
 		<div
 			class="sticky top-16 z-40 mb-3 flex items-center justify-between rounded-md border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-slate-800"
@@ -92,7 +92,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 					<NuxtImg
 						:src="getImageFromSupabaseStorage(crawlData.thumbnail_path)"
 						alt="サムネイル"
-						class="absolute inset-0 h-full w-full rounded-t-lg object-cover"
+						class="absolute inset-0 size-full rounded-t-lg object-cover"
 					/>
 				</div>
 				<div class="flex flex-col justify-between p-5">
@@ -117,7 +117,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 					>
 						sitemapをみる
 						<svg
-							class="ms-2 h-3.5 w-3.5 rtl:rotate-180"
+							class="ms-2 size-3.5 rtl:rotate-180"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"

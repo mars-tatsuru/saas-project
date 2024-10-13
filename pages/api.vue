@@ -16,7 +16,7 @@ definePageMeta({
 </script>
 
 <template>
-	<div class="container p-0 relative z-10 h-full max-w-none gap-5">
+	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
 		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
 			api
 		</h1>

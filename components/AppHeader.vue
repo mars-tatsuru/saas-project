@@ -52,9 +52,9 @@ onMounted(async () => {
 <template>
 	<nav
 		ref="header"
-		class="fixed right-0 top-0 z-50 w-full border-b border-gray-200 bg-white duration-300 md:w-[calc(100%-16rem)] dark:border-gray-700 dark:bg-gray-800"
+		class="fixed right-0 top-0 z-50 w-full border-b border-gray-200 bg-white duration-300 dark:border-gray-700 dark:bg-gray-800 md:w-[calc(100%-16rem)]"
 	>
-		<div class="px-3 py-3 lg:px-5 lg:pl-3">
+		<div class="p-3 lg:px-5 lg:pl-3">
 			<div class="relative flex items-center justify-between">
 				<div class="flex items-center justify-start rtl:justify-end">
 					<!-- <AppBreadCrumb /> -->
@@ -70,7 +70,7 @@ onMounted(async () => {
 								@click="openProfile"
 							>
 								<img
-									class="h-8 w-8 rounded-full"
+									class="size-8 rounded-full"
 									:src="store.userData.picture"
 									alt="user photo"
 								>

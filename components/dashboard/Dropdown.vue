@@ -30,12 +30,12 @@ const selectItems = ref([
 		id="multiLevelDropdownButton"
 		ref="target"
 		data-dropdown-toggle="multi-dropdown"
-		class="absolute right-12 top-4 z-10 rounded-lg border border-gray-200 bg-white px-2 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+		class="absolute right-12 top-4 z-10 rounded-lg border border-gray-200 bg-white p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
 		type="button"
 		@click="toggleDropdown"
 	>
 		<svg
-			class="h-2 w-2"
+			class="size-2"
 			aria-hidden="true"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"

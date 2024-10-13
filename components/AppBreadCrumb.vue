@@ -32,7 +32,7 @@ watchEffect(() => {
 					class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
 				>
 					<svg
-						class="me-2.5 h-3 w-3"
+						class="me-2.5 size-3"
 						aria-hidden="true"
 						xmlns="http://www.w3.org/2000/svg"
 						fill="currentColor"
@@ -54,7 +54,7 @@ watchEffect(() => {
 					class="flex items-center"
 				>
 					<svg
-						class="mx-1 h-3 w-3 text-gray-400 rtl:rotate-180"
+						class="mx-1 size-3 text-gray-400 rtl:rotate-180"
 						aria-hidden="true"
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -69,7 +69,7 @@ watchEffect(() => {
 						/>
 					</svg>
 					<span
-						class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400"
+						class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2"
 					>
 						{{ path }}
 					</span>

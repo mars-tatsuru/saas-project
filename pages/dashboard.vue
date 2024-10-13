@@ -129,7 +129,7 @@ const slotClasses = {
 <template>
 	<div
 		v-if="isReady"
-		class="container relative p-0 z-10 grid h-full max-w-none grid-cols-3 grid-rows-[1fr_1fr_1fr] gap-5"
+		class="container relative z-10 grid h-full max-w-none grid-cols-3 grid-rows-[1fr_1fr_1fr] gap-5 p-0"
 	>
 		<div
 			v-for="slotId in Object.keys(slotItems)"

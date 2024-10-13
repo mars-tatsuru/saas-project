@@ -26,7 +26,7 @@ const props = defineProps<{
 	>
 		<div class="flex flex-col items-center">
 			<img
-				class="mb-3 h-24 w-24 rounded-full shadow-lg"
+				class="mb-3 size-24 rounded-full shadow-lg"
 				:src="props.picture"
 				alt="Bonnie image"
 			>

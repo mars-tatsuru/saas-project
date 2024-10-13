@@ -64,7 +64,7 @@ const startCrawling = async () => {
 </script>
 
 <template>
-	<div class="container p-0 relative z-10 h-full max-w-none gap-5">
+	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
 		<!-- header -->
 		<div
 			class="sticky top-16 z-40 mb-3 flex items-center justify-between rounded-md border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-slate-800"
@@ -100,7 +100,7 @@ const startCrawling = async () => {
 							id="siteUrl"
 							v-model="siteUrl"
 							type="url"
-							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							placeholder="https://example.com"
 							required
 						>
@@ -116,7 +116,7 @@ const startCrawling = async () => {
 							id="siteUrl"
 							type="url"
 							disabled
-							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+							class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 							placeholder="何らかのオプション(今はない)"
 							required
 						>
@@ -126,7 +126,7 @@ const startCrawling = async () => {
 			<button
 				type="button"
 				:disabled="isLoading"
-				class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+				class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
 				@click="startCrawling"
 			>
 				{{ isLoading ? "Crawling..." : "Start Crawling" }}

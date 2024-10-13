@@ -68,7 +68,7 @@ const toggleSidebar = () => {
 	<aside
 		id="logo-sidebar"
 		ref="sidebar"
-		class="fixed grid grid-cols-1 grid-rows-[60px_1fr] gap-4 px-3 left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white transition-width duration-300 sm:translate-x-0 dark:border-gray-700 dark:bg-gray-800"
+		class="transition-width fixed left-0 top-0 z-40 grid h-screen w-64 grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3 duration-300 dark:border-gray-700 dark:bg-gray-800 sm:translate-x-0"
 		aria-label="Sidebar"
 	>
 		<div class="flex items-center justify-between rtl:justify-end">
@@ -77,7 +77,7 @@ const toggleSidebar = () => {
 				class="flex"
 			>
 				<span
-					class="self-center whitespace-nowrap text-xl font-semibold sm:text-2xl dark:text-white"
+					class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl"
 					:class="!store.isSidebarOpen && 'hidden'"
 				>
 					SaaS Kit
@@ -92,7 +92,7 @@ const toggleSidebar = () => {
 				@click="toggleSidebar"
 			>
 				<svg
-					class="h-6 w-6"
+					class="size-6"
 					aria-hidden="true"
 					fill="currentColor"
 					viewBox="0 0 20 20"
@@ -107,9 +107,9 @@ const toggleSidebar = () => {
 			</button>
 		</div>
 		<div
-			class="relative grid h-full grid-cols-1 grid-rows-[1fr_100px] bg-white dark:bg-gray-800 pb-4"
+			class="relative grid h-full grid-cols-1 grid-rows-[1fr_100px] bg-white pb-4 dark:bg-gray-800"
 		>
-			<ul class="w-full space-y-2 font-medium overflow-y-auto">
+			<ul class="w-full space-y-2 overflow-y-auto font-medium">
 				<li>
 					<NuxtLink
 						to="/"
@@ -121,7 +121,7 @@ const toggleSidebar = () => {
 							width="1.5em"
 							height="1.5em"
 							viewBox="0 0 24 24"
-							class="flex-shrink-0"
+							class="shrink-0"
 						>
 							<path
 								fill="currentColor"
@@ -147,7 +147,7 @@ const toggleSidebar = () => {
 							width="1.5rem"
 							height="1.5rem"
 							viewBox="0 0 36 36"
-							class="flex-shrink-0"
+							class="shrink-0"
 						>
 							<path
 								fill="currentColor"
@@ -186,7 +186,7 @@ const toggleSidebar = () => {
 							width="1.5rem"
 							height="1.5rem"
 							viewBox="0 0 512 512"
-							class="flex-shrink-0"
+							class="shrink-0"
 						>
 							<path
 								fill="currentColor"
@@ -200,7 +200,7 @@ const toggleSidebar = () => {
 							API
 						</span>
 						<svg
-							class="h-3 w-3 flex-shrink-0"
+							class="size-3 shrink-0"
 							aria-hidden="true"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -256,7 +256,7 @@ const toggleSidebar = () => {
 							width="1.5em"
 							height="1.5em"
 							viewBox="0 0 24 24"
-							class="flex-shrink-0"
+							class="shrink-0"
 						>
 							<path
 								fill="currentColor"
@@ -286,7 +286,7 @@ const toggleSidebar = () => {
 							width="1.5rem"
 							height="1.5rem"
 							viewBox="0 0 24 24"
-							class="flex-shrink-0"
+							class="shrink-0"
 						>
 							<path
 								fill="currentColor"
@@ -303,7 +303,7 @@ const toggleSidebar = () => {
 				</li>
 				<li>
 					<a
-						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 cursor-pointer"
+						class="group flex cursor-pointer items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
 						@click="signOutWithGoogle"
 					>
 						<svg
@@ -311,7 +311,7 @@ const toggleSidebar = () => {
 							width="1.5rem"
 							height="1.5rem"
 							viewBox="0 0 24 24"
-							class="flex-shrink-0"
+							class="shrink-0"
 						>
 							<path
 								fill="currentColor"

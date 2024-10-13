@@ -43,11 +43,11 @@ watch(
 
 <template>
 	<div
-		class="item relative flex h-full w-full select-none items-center justify-center rounded-md bg-white text-4xl text-gray-700 dark:bg-slate-500 dark:text-gray-300"
+		class="item relative flex size-full select-none items-center justify-center rounded-md bg-white text-4xl text-gray-700 dark:bg-slate-500 dark:text-gray-300"
 		:data-swapy-item="props.dataSwapyItem"
 	>
 		<div
-			class="handle absolute right-4 top-4 z-10 h-6 w-6 cursor-pointer"
+			class="handle absolute right-4 top-4 z-10 size-6 cursor-pointer"
 			data-swapy-handle
 		>
 			<svg
@@ -70,13 +70,13 @@ watch(
 		<Dropdown @update-content="updateContent" />
 		<div
 			v-if="setContent === 'API Usage'"
-			class="item-card started relative h-full w-full px-1 pt-8"
+			class="item-card started relative size-full px-1 pt-8"
 		>
 			<ColumnChart />
 		</div>
 		<div
 			v-if="setContent === 'News'"
-			class="relative h-full max-h-64 w-full overflow-scroll px-6 pb-6 pt-16"
+			class="relative size-full max-h-64 overflow-scroll px-6 pb-6 pt-16"
 		>
 			<News />
 		</div>
@@ -91,7 +91,7 @@ watch(
 					&& setContent !== 'News'
 					&& setContent !== 'Profile'
 			"
-			class="relative flex h-full min-h-52 w-full items-center justify-center overflow-hidden px-6 py-6"
+			class="relative flex size-full min-h-52 items-center justify-center overflow-hidden p-6"
 		>
 			<div class="text-4xl">
 				{{ setContent }}
