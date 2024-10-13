@@ -16,9 +16,11 @@ definePageMeta({
 </script>
 
 <template>
-	<div class="container relative z-10 h-full max-w-none gap-5">
+	<div class="container p-0 relative z-10 h-full max-w-none gap-5">
 		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
 			HOME
 		</h1>
+		<Button>aaaaa</Button>
+		<Input />
 	</div>
 </template>

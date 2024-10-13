@@ -23,11 +23,13 @@ export default defineNuxtConfig({
 	modules: [
 		'@nuxt/eslint',
 		'@nuxtjs/tailwindcss',
+		'shadcn-nuxt',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
 		'@nuxt/image',
 		'@nuxt/devtools',
 		'@nuxtjs/supabase',
+		'shadcn-nuxt',
 	],
 
 	// tailwind: https://nuxt.com/docs/getting-started/configuration#external-configuration-files
@@ -39,6 +41,19 @@ export default defineNuxtConfig({
 		},
 		config: {},
 		viewer: true,
+	},
+
+	// shadcn: https://www.shadcn-vue.com/docs/installation/nuxt
+	shadcn: {
+		/**
+     * Prefix for all the imported component
+     */
+		prefix: '',
+		/**
+     * Directory that the component lives in.
+     * @default "./components/ui"
+     */
+		componentDir: './components/ui',
 	},
 
 	// eslint: https://nuxt.com/docs/guide/concepts/code-style#eslint

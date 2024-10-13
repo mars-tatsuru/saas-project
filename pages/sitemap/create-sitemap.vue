@@ -64,7 +64,7 @@ const startCrawling = async () => {
 </script>
 
 <template>
-	<div class="container relative z-10 h-full max-w-none gap-5">
+	<div class="container p-0 relative z-10 h-full max-w-none gap-5">
 		<!-- header -->
 		<div
 			class="sticky top-16 z-40 mb-3 flex items-center justify-between rounded-md border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-slate-800"
