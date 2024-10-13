@@ -1,4 +1,5 @@
-// @ts-check
+// @ts-nocheck
+import pluginTailwindCss from 'eslint-plugin-tailwindcss';
 import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
@@ -15,4 +16,6 @@ export default withNuxt(
 		rules: {
 		},
 	},
+).append(
+	pluginTailwindCss.configs['flat/recommended'],
 );
