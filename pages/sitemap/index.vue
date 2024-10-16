@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { useToast } from '@/components/ui/toast/use-toast';
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
+const { toast } = useToast();
 
 definePageMeta({
 	title: 'sitemap',
@@ -68,9 +70,14 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 /***********************************************
  * Delete crawl data from Supabase
  ***********************************************/
+const isAlertOpen = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
 const deleteCrawlData = async (id: string, url: string, userId: string) => {
-	const urlHost = new URL(url).hostname;
+	// Start loading
+	isLoading.value = true;
 
+	// Get the hostname from the URL
+	const urlHost = new URL(url).hostname;
 	console.log('deleteCrawlData', id, urlHost);
 
 	try {
@@ -126,13 +133,92 @@ const deleteCrawlData = async (id: string, url: string, userId: string) => {
 		console.log('Successfully deleted crawl data and bucket');
 
 		// Refresh data
+		isLoading.value = false;
+		isAlertOpen.value = false;
+
 		await getDataFromSupabase();
+
+		setTimeout(() => {
+			toast({
+				title: 'サイトマップ削除',
+				description: 'サイトマップを削除しました。',
+				variant: 'success',
+			});
+		}, 1000);
 	}
 	catch (error) {
 		console.error('Failed to delete crawl data:', error);
+		isLoading.value = false;
+		isAlertOpen.value = false;
+
+		setTimeout(() => {
+			toast({
+				title: 'サイトマップ削除',
+				description: 'サイトマップの削除に失敗しました。',
+				variant: 'destructive',
+			});
+		}, 1000);
+
 		throw error;
 	}
 };
+
+/***********************************************
+ * Realtime data fetching
+ ***********************************************/
+const fetchRealtimeData = () => {
+	try {
+		client
+			.channel('SaaS-kit') // 任意のチャンネル名
+			.on(
+				'postgres_changes',
+				{
+					event: '*',
+					schema: 'public',
+					table: 'crawl_data',
+				},
+				(payload) => {
+					// insert
+					if (payload.eventType === 'INSERT') {
+						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new;
+						crawlDataList.value = [
+							...crawlDataList.value,
+							{
+								id,
+								created_at,
+								site_url,
+								user_id,
+								json_data,
+								thumbnail_path,
+							},
+						];
+					}
+
+					// delete
+					if (payload.eventType === 'DELETE') {
+						const { id } = payload.old;
+						crawlDataList.value = crawlDataList.value.filter(item => item.id !== id);
+					}
+				},
+			)
+			.subscribe();
+
+		// リスナーの解除
+		return () => client.channel('SaaS-kit').unsubscribe();
+	}
+	catch (error) {
+		// console.error(error);
+	}
+};
+
+/***********************************************
+ * Watch for user changes
+ ***********************************************/
+watchEffect(async () => {
+	if (user.value) {
+		fetchRealtimeData();
+	}
+});
 </script>
 
 <template>
@@ -154,11 +240,14 @@ const deleteCrawlData = async (id: string, url: string, userId: string) => {
 				<CardContent
 					class="relative p-0"
 				>
-					<AlertDialog>
+					<AlertDialog
+						:open="isAlertOpen"
+					>
 						<AlertDialogTrigger as-child>
 							<Button
 								variant="outline"
 								class="absolute right-3 top-3 z-30 h-fit p-0"
+								@click.prevent="isAlertOpen = true"
 							>
 								<Icon
 									icon="radix-icons:trash"
@@ -174,11 +263,15 @@ const deleteCrawlData = async (id: string, url: string, userId: string) => {
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>
-								<AlertDialogCancel>戻る</AlertDialogCancel>
+								<AlertDialogCancel
+									@click="isAlertOpen = false"
+								>
+									戻る
+								</AlertDialogCancel>
 								<AlertDialogAction
 									@click="deleteCrawlData(crawlData.id, crawlData.site_url, crawlData.user_id)"
 								>
-									削除する
+									{{ isLoading ? '削除中...' : '削除する' }}
 								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>
@@ -226,6 +319,9 @@ const deleteCrawlData = async (id: string, url: string, userId: string) => {
 				</CardFooter>
 			</Card>
 		</div>
+
+		<!-- toast -->
+		<Toaster />
 	</div>
 </template>
 

@@ -56,16 +56,23 @@ const onCrawlSubmit = async () => {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		toast({
-			title: 'サイトマップ作成リクエスト',
-			description: 'サイトマップ作成リクエストを受け付けました。',
-			variant: 'success',
-		});
-
 		setTimeout(() => {
+			// Reset form
 			isLoading.value = false;
 			siteUrl.value = '';
-		}, 1000);
+
+			// Show success toast
+			toast({
+				title: 'サイトマップ作成リクエスト',
+				description: 'サイトマップ作成リクエストを受け付けました。',
+				variant: 'success',
+			});
+		}, 2000);
+
+		setTimeout(() => {
+			// Redirect to sitemap page
+			router.push('/sitemap');
+		}, 3500);
 	}
 	catch (error) {
 		console.error('Crawling failed:', error);
