@@ -64,6 +64,75 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 
 	return data.publicUrl;
 };
+
+/***********************************************
+ * Delete crawl data from Supabase
+ ***********************************************/
+const deleteCrawlData = async (id: string, url: string, userId: string) => {
+	const urlHost = new URL(url).hostname;
+
+	console.log('deleteCrawlData', id, urlHost);
+
+	try {
+		// https://github.com/orgs/supabase/discussions/4218
+		// Delete crawl data from storage
+		const bucketName = 'thumbnail';
+		const folderPath = `private/${userId}/${urlHost}`;
+		console.log('folderPath:' + folderPath);
+
+		// 1. empty the bucket
+		const { data: list, error: listError } = await client.storage.from(bucketName).list(folderPath);
+		if (listError) {
+			console.error('Error listing files:', listError);
+			throw listError;
+		}
+		console.log('list', list);
+		if (!list || list.length === 0) {
+			console.log('No files to remove');
+			return;
+		}
+
+		// 2. remove the files
+		const filesToRemove = list.map(x => `${folderPath}/${x.name}`);
+		console.log('Files to remove:', filesToRemove);
+
+		const { data, error: removeError } = await client.storage.from(bucketName).remove(filesToRemove);
+
+		if (removeError) {
+			console.error('Error removing files:', removeError);
+			throw removeError;
+		}
+
+		console.log('Removal operation completed:', data);
+
+		// 3. Verify deletion (optional, but helpful for debugging)
+		const { data: verifyList, error: verifyError } = await client.storage.from(bucketName).list(folderPath);
+
+		if (verifyError) {
+			console.error('Error verifying deletion:', verifyError);
+		}
+		else {
+			console.log('Files remaining after deletion:', verifyList);
+		}
+
+		// 4. Delete crawl data from database
+		const { error: dbError } = await client
+			.from('crawl_data')
+			.delete()
+			.eq('id', id);
+
+		if (dbError) throw dbError;
+
+		console.log('Successfully deleted crawl data and bucket');
+
+		// Refresh data
+		await getDataFromSupabase();
+	}
+	catch (error) {
+		console.error('Failed to delete crawl data:', error);
+		throw error;
+	}
+};
 </script>
 
 <template>
@@ -83,8 +152,37 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 				class="grid grid-rows-[auto_1fr] dark:bg-slate-900"
 			>
 				<CardContent
-					class="p-0"
+					class="relative p-0"
 				>
+					<AlertDialog>
+						<AlertDialogTrigger as-child>
+							<Button
+								variant="outline"
+								class="absolute right-3 top-3 z-30 h-fit p-0"
+							>
+								<Icon
+									icon="radix-icons:trash"
+									class="size-6"
+								/>
+							</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+								<AlertDialogDescription>
+									一度削除すると元に戻すことはできません。
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>戻る</AlertDialogCancel>
+								<AlertDialogAction
+									@click="deleteCrawlData(crawlData.id, crawlData.site_url, crawlData.user_id)"
+								>
+									削除する
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 					<div class="relative h-52 w-full overflow-hidden">
 						<NuxtImg
 							:src="getImageFromSupabaseStorage(crawlData.thumbnail_path)"

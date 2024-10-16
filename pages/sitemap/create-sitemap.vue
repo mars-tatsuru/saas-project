@@ -62,8 +62,10 @@ const onCrawlSubmit = async () => {
 			variant: 'success',
 		});
 
-		isLoading.value = false;
-		siteUrl.value = '';
+		setTimeout(() => {
+			isLoading.value = false;
+			siteUrl.value = '';
+		}, 1000);
 	}
 	catch (error) {
 		console.error('Crawling failed:', error);
