@@ -23,7 +23,7 @@ watch(
 		<!-- Main -->
 		<div
 			ref="main"
-			class="ml-auto flex h-screen min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 dark:bg-black md:p-4"
+			class="ml-auto flex h-screen min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 dark:bg-slate-900 md:p-4"
 		>
 			<div class="hidden size-full dark:border-gray-700 md:block">
 				<slot />
