@@ -43,7 +43,7 @@ watch(
 
 <template>
 	<div
-		class="item relative flex size-full select-none items-center justify-center rounded-md bg-white text-4xl text-gray-700 dark:bg-slate-500 dark:text-gray-300"
+		class="item relative flex size-full select-none items-center justify-center rounded-md border border-gray-200 bg-white text-4xl text-gray-700 shadow-md dark:border-[#4c4c4c] dark:bg-[#1f1f1f] dark:text-gray-300 dark:shadow-lg"
 		:data-swapy-item="props.dataSwapyItem"
 	>
 		<div

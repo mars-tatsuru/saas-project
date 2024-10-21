@@ -100,7 +100,7 @@ onMounted(async () => {
 <template>
 	<nav
 		ref="header"
-		class="fixed right-0 top-0 z-50 w-full border-b border-gray-200 bg-white duration-300 dark:border-gray-700 dark:bg-gray-800 md:w-[calc(100%-16rem)]"
+		class="fixed right-0 top-0 z-50 w-full border-b border-gray-200 bg-white duration-300 dark:border-[#4c4c4c] dark:bg-[#171717] md:w-[calc(100%-16rem)]"
 	>
 		<div class="p-3 lg:px-5 lg:pl-3">
 			<div class="relative flex items-center justify-between">

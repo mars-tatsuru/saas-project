@@ -48,7 +48,7 @@ const getDataFromSupabase = async () => {
 	const { data, error } = await client
 		.from('crawl_data')
 		.select('*')
-		.eq('user_id', user.value?.id);
+		.eq('user_id', user.value?.id).order('id', { ascending: false });
 
 	crawlDataList.value = data || [];
 
@@ -63,6 +63,11 @@ const getDataFromSupabase = async () => {
  ***********************************************/
 const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 	const { data } = client.storage.from('thumbnail').getPublicUrl(thumbnailPath);
+
+	// TODO: when the image is not found
+	if (!data) {
+		return '';
+	}
 
 	return data.publicUrl;
 };
@@ -194,6 +199,24 @@ const fetchRealtimeData = () => {
 						];
 					}
 
+					// update
+					if (payload.eventType === 'UPDATE') {
+						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new;
+						crawlDataList.value = crawlDataList.value.map((item) => {
+							if (item.id === id) {
+								return {
+									id,
+									created_at,
+									site_url,
+									user_id,
+									json_data,
+									thumbnail_path,
+								};
+							}
+							return item;
+						});
+					}
+
 					// delete
 					if (payload.eventType === 'DELETE') {
 						const { id } = payload.old;
@@ -235,7 +258,7 @@ watchEffect(async () => {
 			<Card
 				v-for="crawlData in crawlDataList"
 				:key="crawlData.id"
-				class="grid grid-rows-[auto_1fr] dark:bg-slate-900"
+				class="grid grid-rows-[auto_1fr] dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
 			>
 				<CardContent
 					class="relative p-0"
@@ -245,13 +268,14 @@ watchEffect(async () => {
 					>
 						<AlertDialogTrigger as-child>
 							<Button
+								v-if="crawlData.json_data"
 								variant="outline"
 								class="absolute right-3 top-3 z-30 h-fit p-0"
 								@click.prevent="isAlertOpen = true"
 							>
 								<Icon
 									icon="radix-icons:trash"
-									class="size-6"
+									class="size-6 rounded-md dark:bg-[#1f1f1f]"
 								/>
 							</Button>
 						</AlertDialogTrigger>
@@ -278,10 +302,23 @@ watchEffect(async () => {
 					</AlertDialog>
 					<div class="relative h-52 w-full overflow-hidden">
 						<NuxtImg
+							v-if="crawlData.thumbnail_path"
 							:src="getImageFromSupabaseStorage(crawlData.thumbnail_path)"
 							alt="サムネイル"
 							class="absolute inset-0 size-full rounded-t-lg object-cover"
 						/>
+						<div
+							v-else
+							class="relative h-52 w-full"
+						>
+							<Skeleton
+								class="size-full rounded-t-lg bg-gray-200 dark:bg-[#171717]"
+							/>
+							<Icon
+								icon="eos-icons:loading"
+								class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"
+							/>
+						</div>
 					</div>
 					<div class="flex flex-col justify-between p-3">
 						<div class="flex flex-col gap-2 break-all">
@@ -301,20 +338,25 @@ watchEffect(async () => {
 						</div>
 					</div>
 				</CardContent>
-				<CardFooter
-					class="items-end justify-center p-3"
-				>
+				<CardFooter class="items-end justify-center p-3">
 					<Button
 						as-child
 						class="relative"
 						variant="link"
 					>
 						<NuxtLink
+							v-if="crawlData.json_data"
 							:to="`/sitemap/${crawlData.id}`"
 							class="flex items-center justify-center gap-3 font-bold underline"
 						>
 							サイトマップを見る
 						</NuxtLink>
+						<span
+							v-else
+							class="flex cursor-progress items-center justify-center gap-3 font-bold text-gray-500"
+						>
+							クロール中...
+						</span>
 					</Button>
 				</CardFooter>
 			</Card>

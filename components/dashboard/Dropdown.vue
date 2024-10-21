@@ -30,7 +30,7 @@ const selectItems = ref([
 		id="multiLevelDropdownButton"
 		ref="target"
 		data-dropdown-toggle="multi-dropdown"
-		class="absolute right-12 top-4 z-10 rounded-lg border border-gray-200 bg-white p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+		class="absolute right-12 top-4 z-10 rounded-lg border border-gray-200 bg-white p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-400 dark:hover:bg-[#171717] dark:hover:text-white dark:focus:ring-gray-700"
 		type="button"
 		@click="toggleDropdown"
 	>
@@ -54,7 +54,7 @@ const selectItems = ref([
 	<!-- Dropdown menu -->
 	<div
 		id="multi-dropdown"
-		class="absolute right-12 top-14 z-10 w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+		class="absolute right-12 top-14 z-10 w-44 divide-y divide-gray-100 rounded-lg border bg-white shadow dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
 		:class="isOpen ? 'block' : 'hidden'"
 	>
 		<ul
@@ -67,7 +67,7 @@ const selectItems = ref([
 				@click="updateContent(`${items.name}`)"
 			>
 				<span
-					class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+					class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#525252] dark:hover:text-white"
 				>
 					{{ items.name }}
 				</span>

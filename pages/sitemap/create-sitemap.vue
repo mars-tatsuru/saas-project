@@ -99,7 +99,7 @@ const onCrawlSubmit = async () => {
 
 		<!-- form -->
 		<div
-			class="mt-4  min-h-[calc(100vh-12rem)] rounded-md border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-slate-800"
+			class="mt-4 min-h-[calc(100vh-12rem)] rounded-md border border-gray-200 bg-white p-6  dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
 		>
 			<Form
 				class="space-y-6"
@@ -117,10 +117,13 @@ const onCrawlSubmit = async () => {
 								v-bind="componentField"
 								v-model="siteUrl"
 								type="text"
+								class="!dark:bg-[#1f1f1f] border-gray-200 bg-gray-100 placeholder:text-[#575757] dark:border-[#1f1f1f] dark:text-black dark:placeholder:text-[#575757]"
 								placeholder="https://example.com"
 							/>
 						</FormControl>
-						<FormDescription>
+						<FormDescription
+							class="text-white"
+						>
 							サイトマップを作成するためのURLを入力してください。
 						</FormDescription>
 						<FormMessage />

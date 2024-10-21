@@ -68,7 +68,7 @@ const toggleSidebar = () => {
 	<aside
 		id="logo-sidebar"
 		ref="sidebar"
-		class="transition-width fixed left-0 top-0 z-40 grid h-screen w-64 grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3 duration-300 dark:border-gray-700 dark:bg-gray-800 sm:translate-x-0"
+		class="fixed left-0 top-0 z-40 grid h-screen w-64 grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3 transition duration-300 dark:border-[#4c4c4c] dark:bg-[#171717] sm:translate-x-0"
 		aria-label="Sidebar"
 	>
 		<div class="flex items-center justify-between rtl:justify-end">
@@ -107,7 +107,7 @@ const toggleSidebar = () => {
 			</button>
 		</div>
 		<div
-			class="relative grid h-full grid-cols-1 grid-rows-[1fr_100px] bg-white pb-4 dark:bg-gray-800"
+			class="relative grid h-full grid-cols-1 grid-rows-[1fr_100px] bg-white pb-4 dark:bg-[#171717]"
 		>
 			<ul class="w-full space-y-2 overflow-y-auto font-medium">
 				<li>

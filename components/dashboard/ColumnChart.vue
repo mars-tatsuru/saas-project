@@ -5,13 +5,13 @@ type ChartOptions = {
 	chart: {
 		type: string;
 	};
-	colors: string[];
+	colors?: string[];
 	plotOptions: {
 		bar: {
 			borderRadius: number;
 			borderRadiusApplication: string;
 			style?: {
-				colors: string[];
+				colors?: string[];
 			};
 		};
 	};
@@ -71,7 +71,7 @@ onMounted(() => {
 	// generate array of random numbers of length 10
 	setTimeout(() => {
 		updateChart();
-	}, 500);
+	}, 200);
 });
 </script>
 
