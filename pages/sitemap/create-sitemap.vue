@@ -117,7 +117,7 @@ const onCrawlSubmit = async () => {
 								v-bind="componentField"
 								v-model="siteUrl"
 								type="text"
-								class="!dark:bg-[#1f1f1f] border-gray-200 bg-gray-100 placeholder:text-[#575757] dark:border-[#1f1f1f] dark:text-black dark:placeholder:text-[#575757]"
+								class="border-gray-200 bg-gray-100 placeholder:text-[#575757] dark:border-[#6c6c6c] dark:bg-[#171717] dark:text-black dark:placeholder:text-[#575757]"
 								placeholder="https://example.com"
 							/>
 						</FormControl>

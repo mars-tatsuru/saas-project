@@ -312,7 +312,7 @@ watchEffect(async () => {
 							class="relative h-52 w-full"
 						>
 							<Skeleton
-								class="size-full rounded-t-lg bg-gray-200 dark:bg-[#171717]"
+								class="size-full rounded-none rounded-t-lg bg-gray-200 dark:bg-[#171717]"
 							/>
 							<Icon
 								icon="eos-icons:loading"

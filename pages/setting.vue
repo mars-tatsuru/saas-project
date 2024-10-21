@@ -84,7 +84,7 @@ const updateUserName = async (name: string) => {
 		/>
 
 		<!-- content -->
-		<div class="mt-4 min-h-[calc(100vh-12rem)] w-full rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+		<div class="mt-4 min-h-[calc(100vh-12rem)] w-full rounded-lg bg-white p-6 shadow-md dark:bg-[#1f1f1f]">
 			<div class="">
 				<h2 class="mb-6 text-xl font-semibold text-gray-800 dark:text-gray-100">
 					Profile
@@ -95,7 +95,7 @@ const updateUserName = async (name: string) => {
 						<input
 							v-model="inputName"
 							type="text"
-							class="w-full rounded-lg border px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+							class="w-full rounded-lg border px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none dark:border-[#6c6c6c] dark:bg-[#171717] dark:text-white"
 						>
 						<Button
 
