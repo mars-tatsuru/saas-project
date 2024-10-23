@@ -152,11 +152,11 @@ const deleteCrawlData = async () => {
 
 		console.log('Successfully deleted crawl data and bucket');
 
+		await getDataFromSupabase();
+
 		// Refresh data
 		isLoading.value = false;
 		isAlertOpen.value = false;
-
-		await getDataFromSupabase();
 
 		setTimeout(() => {
 			toast({
@@ -164,7 +164,7 @@ const deleteCrawlData = async () => {
 				description: 'サイトマップを削除しました。',
 				variant: 'success',
 			});
-		}, 1000);
+		}, 500);
 	}
 	catch (error) {
 		console.error('Failed to delete crawl data:', error);
@@ -177,7 +177,7 @@ const deleteCrawlData = async () => {
 				description: 'サイトマップの削除に失敗しました。',
 				variant: 'destructive',
 			});
-		}, 1000);
+		}, 500);
 
 		throw error;
 	}
@@ -327,7 +327,7 @@ watchEffect(async () => {
 							class="relative h-52 w-full"
 						>
 							<Skeleton
-								class="size-full rounded-none rounded-t-lg bg-gray-200 dark:bg-[#171717]"
+								class="size-full rounded-none rounded-t-lg bg-gray-300 dark:bg-gray-800"
 							/>
 							<Icon
 								icon="eos-icons:loading"
@@ -350,7 +350,6 @@ watchEffect(async () => {
 							<p class="font-normal text-gray-700 dark:text-gray-400">
 								{{ crawlData.created_at }}
 							</p>
-							<p>{{ crawlData.id }}</p>
 						</div>
 					</div>
 				</CardContent>

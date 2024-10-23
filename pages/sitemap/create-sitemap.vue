@@ -72,7 +72,7 @@ const onCrawlSubmit = async () => {
 		setTimeout(() => {
 			// Redirect to sitemap page
 			router.push('/sitemap');
-		}, 3500);
+		}, 4000);
 	}
 	catch (error) {
 		console.error('Crawling failed:', error);
@@ -117,12 +117,12 @@ const onCrawlSubmit = async () => {
 								v-bind="componentField"
 								v-model="siteUrl"
 								type="text"
-								class="border-gray-200 bg-gray-100 placeholder:text-[#575757] dark:border-[#6c6c6c] dark:bg-[#171717] dark:text-black dark:placeholder:text-[#575757]"
+								class="border-gray-300 bg-gray-100 placeholder:text-[#575757] dark:border-[#6c6c6c] dark:bg-[#171717] dark:text-white dark:placeholder:text-[#575757]"
 								placeholder="https://example.com"
 							/>
 						</FormControl>
 						<FormDescription
-							class="text-white"
+							class="dark:text-white"
 						>
 							サイトマップを作成するためのURLを入力してください。
 						</FormDescription>
