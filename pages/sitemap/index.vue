@@ -361,9 +361,6 @@ watchEffect(async () => {
 				</CardFooter>
 			</Card>
 		</div>
-
-		<!-- toast -->
-		<Toaster />
 	</div>
 </template>
 

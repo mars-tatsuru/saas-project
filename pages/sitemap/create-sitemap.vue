@@ -137,9 +137,6 @@ const onCrawlSubmit = async () => {
 				</Button>
 			</Form>
 		</div>
-
-		<!-- toast -->
-		<Toaster />
 	</div>
 </template>
 

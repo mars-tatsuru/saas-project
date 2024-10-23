@@ -113,8 +113,5 @@ const updateUserName = async (name: string) => {
 				</div>
 			</div>
 		</div>
-
-		<!-- toast -->
-		<Toaster />
 	</div>
 </template>
