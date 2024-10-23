@@ -32,7 +32,7 @@ const login = async (providerName: 'google' | 'github') => {
 	<div
 		class="relative z-10 flex h-full max-w-none flex-col items-center justify-center gap-5"
 	>
-		<Card class="w-full dark:bg-slate-900 md:max-w-xl">
+		<Card class="w-full dark:border-[#1f1f1f] dark:bg-[#1f1f1f] md:max-w-xl">
 			<CardHeader>
 				<CardTitle>SaaS Kit</CardTitle>
 				<CardDescription>ログインしてください</CardDescription>

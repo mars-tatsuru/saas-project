@@ -69,10 +69,10 @@ const onCrawlSubmit = async () => {
 			});
 		}, 2000);
 
-		setTimeout(() => {
-			// Redirect to sitemap page
-			router.push('/sitemap');
-		}, 4000);
+		// setTimeout(() => {
+		// 	// Redirect to sitemap page
+		// 	router.push('/sitemap');
+		// }, 4000);
 	}
 	catch (error) {
 		console.error('Crawling failed:', error);
