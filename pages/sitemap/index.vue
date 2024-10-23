@@ -77,19 +77,34 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
  ***********************************************/
 const isAlertOpen = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
-const deleteCrawlData = async (id: string, url: string, userId: string) => {
+const deleteData = ref<CrawlData | null>(null);
+const openModal = (crawlData: CrawlData) => {
+	deleteData.value = crawlData;
+	isAlertOpen.value = true;
+};
+
+const closeModal = () => {
+	isAlertOpen.value = false;
+	deleteData.value = null;
+};
+
+const deleteCrawlData = async () => {
 	// Start loading
 	isLoading.value = true;
 
+	if (!deleteData.value) {
+		return;
+	}
+
 	// Get the hostname from the URL
-	const urlHost = new URL(url).hostname;
-	console.log('deleteCrawlData', id, urlHost);
+	const urlHost = new URL(deleteData.value.site_url).hostname;
+	console.log('deleteCrawlData', deleteData.value.id, urlHost);
 
 	try {
 		// https://github.com/orgs/supabase/discussions/4218
 		// Delete crawl data from storage
 		const bucketName = 'thumbnail';
-		const folderPath = `private/${userId}/${urlHost}`;
+		const folderPath = `private/${deleteData.value.user_id}/${urlHost}`;
 		console.log('folderPath:' + folderPath);
 
 		// 1. empty the bucket
@@ -131,7 +146,7 @@ const deleteCrawlData = async (id: string, url: string, userId: string) => {
 		const { error: dbError } = await client
 			.from('crawl_data')
 			.delete()
-			.eq('id', id);
+			.eq('id', deleteData.value.id);
 
 		if (dbError) throw dbError;
 
@@ -257,7 +272,7 @@ watchEffect(async () => {
 		<div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] gap-4">
 			<Card
 				v-for="crawlData in crawlDataList"
-				:key="crawlData.id"
+				:key="crawlData.user_id"
 				class="grid grid-rows-[auto_1fr] dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
 			>
 				<CardContent
@@ -271,7 +286,7 @@ watchEffect(async () => {
 								v-if="crawlData.json_data"
 								variant="outline"
 								class="absolute right-3 top-3 z-30 h-fit p-0"
-								@click.prevent="isAlertOpen = true"
+								@click.prevent="openModal(crawlData)"
 							>
 								<Icon
 									icon="radix-icons:trash"
@@ -288,12 +303,12 @@ watchEffect(async () => {
 							</AlertDialogHeader>
 							<AlertDialogFooter>
 								<AlertDialogCancel
-									@click="isAlertOpen = false"
+									@click="closeModal"
 								>
 									戻る
 								</AlertDialogCancel>
 								<AlertDialogAction
-									@click="deleteCrawlData(crawlData.id, crawlData.site_url, crawlData.user_id)"
+									@click="deleteCrawlData"
 								>
 									{{ isLoading ? '削除中...' : '削除する' }}
 								</AlertDialogAction>
@@ -335,6 +350,7 @@ watchEffect(async () => {
 							<p class="font-normal text-gray-700 dark:text-gray-400">
 								{{ crawlData.created_at }}
 							</p>
+							<p>{{ crawlData.id }}</p>
 						</div>
 					</div>
 				</CardContent>
