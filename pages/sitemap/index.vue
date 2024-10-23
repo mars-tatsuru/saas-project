@@ -348,7 +348,13 @@ watchEffect(async () => {
 								</h5>
 							</a>
 							<p class="font-normal text-gray-700 dark:text-gray-400">
-								{{ crawlData.created_at }}
+								クロール日: {{ new Date(crawlData.created_at).toLocaleString('ja-JP', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+									hour: '2-digit',
+									minute: '2-digit',
+								}) }}
 							</p>
 						</div>
 					</div>
