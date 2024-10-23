@@ -200,7 +200,12 @@ const fetchRealtimeData = () => {
 				(payload) => {
 					// insert
 					if (payload.eventType === 'INSERT') {
-						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new.filter((item: any) => item.user_id === user.value?.id)[0];
+						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new;
+
+						if (user.value?.id !== user_id) {
+							return;
+						}
+
 						crawlDataList.value = [
 							...crawlDataList.value,
 							{
@@ -216,7 +221,7 @@ const fetchRealtimeData = () => {
 
 					// update
 					if (payload.eventType === 'UPDATE') {
-						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new.filter((item: any) => item.user_id === user.value?.id)[0];
+						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new;
 						crawlDataList.value = crawlDataList.value.map((item) => {
 							if (item.id === id) {
 								return {
