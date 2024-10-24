@@ -108,6 +108,7 @@ const deleteCrawlData = async () => {
 		console.log('folderPath:' + folderPath);
 
 		// 1. empty the bucket
+		// TODO: supabase function (DataBase → Functions)
 		const { data: list, error: listError } = await client.storage.from(bucketName).list(folderPath);
 		if (listError) {
 			console.error('Error listing files:', listError);
