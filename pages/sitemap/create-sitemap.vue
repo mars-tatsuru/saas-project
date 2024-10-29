@@ -32,8 +32,6 @@ const errorMessage = ref<string | null>(null);
 const VITE_CRAWL_API = import.meta.env.VITE_CRAWL_API;
 
 const onCrawlSubmit = async () => {
-	console.log('Crawling started...');
-
 	if (!user.value?.id) {
 		errorMessage.value = 'User not authenticated';
 		return;

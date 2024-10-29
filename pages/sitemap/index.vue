@@ -98,14 +98,12 @@ const deleteCrawlData = async () => {
 
 	// Get the hostname from the URL
 	const urlHost = new URL(deleteData.value.site_url).hostname;
-	console.log('deleteCrawlData', deleteData.value.id, urlHost);
 
 	try {
 		// https://github.com/orgs/supabase/discussions/4218
 		// Delete crawl data from storage
 		const bucketName = 'thumbnail';
 		const folderPath = `private/${deleteData.value.user_id}/${urlHost}`;
-		console.log('folderPath:' + folderPath);
 
 		// 1. empty the bucket
 		// TODO: supabase function (DataBase → Functions)
@@ -114,15 +112,13 @@ const deleteCrawlData = async () => {
 			console.error('Error listing files:', listError);
 			throw listError;
 		}
-		console.log('list', list);
+
 		if (!list || list.length === 0) {
-			console.log('No files to remove');
 			return;
 		}
 
 		// 2. remove the files
 		const filesToRemove = list.map(x => `${folderPath}/${x.name}`);
-		console.log('Files to remove:', filesToRemove);
 
 		const { data, error: removeError } = await client.storage.from(bucketName).remove(filesToRemove);
 
@@ -131,16 +127,10 @@ const deleteCrawlData = async () => {
 			throw removeError;
 		}
 
-		console.log('Removal operation completed:', data);
-
 		// 3. Verify deletion (optional, but helpful for debugging)
 		const { data: verifyList, error: verifyError } = await client.storage.from(bucketName).list(folderPath);
-
 		if (verifyError) {
 			console.error('Error verifying deletion:', verifyError);
-		}
-		else {
-			console.log('Files remaining after deletion:', verifyList);
 		}
 
 		// 4. Delete crawl data from database
@@ -150,8 +140,6 @@ const deleteCrawlData = async () => {
 			.eq('id', deleteData.value.id);
 
 		if (dbError) throw dbError;
-
-		console.log('Successfully deleted crawl data and bucket');
 
 		await getDataFromSupabase();
 

@@ -40,7 +40,6 @@ const openMenu = () => {
 
 watch(() => route.path, (path) => {
 	routePath.value = path;
-	console.log(path);
 });
 
 onMounted(() => {
