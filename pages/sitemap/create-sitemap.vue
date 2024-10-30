@@ -55,22 +55,22 @@ const getDataFromSupabase = async () => {
  * Form schema
  *************************************************/
 const hasSameUrl = (url: string) => {
-	const isFlag = crawlDataList.value.some(crawlData => crawlData.site_url === url || crawlData.site_url.includes(url));
-
-	const targetRow = document.querySelectorAll('#targetRow');
+	const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+	const origin = urlRegex.test(url) ? new URL(url).origin : '';
+	const isFlag = crawlDataList.value.some(data =>
+		data.site_url === url || (origin !== '' && data.site_url.includes(origin)),
+	);
 
 	if (isFlag) {
-		// Scroll to target row
-		if (isFlag) {
-			nextTick(() => {
-				if (targetRow) {
-					targetRow[0].scrollIntoView({
-						behavior: 'smooth',
-						block: 'center',
-						inline: 'center',
-					});
-				}
-			});
+		const targetRow = document.querySelector('#targetRow');
+		if (targetRow) {
+			setTimeout(() => {
+				targetRow.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'center',
+				});
+			}, 200);
 		}
 	}
 
@@ -113,7 +113,7 @@ const onCrawlSubmit = async () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				siteUrl: siteUrl.value,
+				siteUrl: new URL(siteUrl.value).origin + '/',
 				userId: user.value.id,
 				numberOfCrawlPage: String(numberOfCrawlPage.value),
 			}),
@@ -198,7 +198,9 @@ onMounted(async () => {
 								/>
 							</FormControl>
 							<FormDescription class="dark:text-white">
-								サイトマップを作成するためのURLを入力してください。
+								サイトマップを作成するためのURLを入力してください。<br>
+								<span class="text-[0.8rem]">※クロール対象URLは同じURLが既にクロールされていないか確認してください。</span><br>
+								<span class="text-[0.8rem]">※クロールは入力していただいたURLのトップページから開始いたします。</span>
 							</FormDescription>
 							<FormMessage />
 						</FormItem>
