@@ -8,7 +8,7 @@ const props = defineProps<{
 
 <template>
 	<div
-		class="sticky top-20 z-40 flex items-center justify-between rounded-md border border-gray-200 bg-white p-6 shadow-md dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
+		class="sticky top-20 z-50 flex items-center justify-between rounded-md border border-gray-200 bg-white p-6 shadow-md dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
 	>
 		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
 			{{ props.title }}

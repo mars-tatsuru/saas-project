@@ -175,7 +175,7 @@ onMounted(async () => {
 		<!-- form and crawl data -->
 		<div class="mt-4 flex min-h-[calc(100vh-12.5rem)] w-full gap-6 rounded-md border border-gray-200 bg-white p-6 dark:border-[#4c4c4c] dark:bg-[#1f1f1f]">
 			<!-- Form Section -->
-			<div class="flex h-[calc(100vh-17rem)] w-3/5">
+			<div class="flex max-h-[calc(100vh-16rem)] w-3/5">
 				<Form
 					class="flex w-full flex-col gap-8"
 					:validation-schema="formSchema"
@@ -248,7 +248,7 @@ onMounted(async () => {
 			<div class="w-[2px] self-stretch bg-gray-100" />
 
 			<!-- Results Table Section -->
-			<div class="flex h-[calc(100vh-17rem)] w-2/5 flex-col">
+			<div class="flex max-h-[calc(100vh-16rem)] w-2/5 flex-col">
 				<h3 class="mb-4 pt-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
 					クロール済URL
 				</h3>
