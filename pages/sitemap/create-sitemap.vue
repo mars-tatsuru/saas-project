@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { toTypedSchema } from '@vee-validate/zod';
 import * as z from 'zod';
 import { useToast } from '@/components/ui/toast/use-toast';
@@ -56,8 +55,28 @@ const getDataFromSupabase = async () => {
  * Form schema
  *************************************************/
 const hasSameUrl = (url: string) => {
-	return crawlDataList.value.some(crawlData => crawlData.site_url === url || crawlData.site_url.includes(url));
+	const isFlag = crawlDataList.value.some(crawlData => crawlData.site_url === url || crawlData.site_url.includes(url));
+
+	const targetRow = document.querySelectorAll('#targetRow');
+
+	if (isFlag) {
+		// Scroll to target row
+		if (isFlag) {
+			nextTick(() => {
+				if (targetRow) {
+					targetRow[0].scrollIntoView({
+						behavior: 'smooth',
+						block: 'center',
+						inline: 'center',
+					});
+				}
+			});
+		}
+	}
+
+	return isFlag;
 };
+
 const formSchema = toTypedSchema(z.object({
 	crawlUrl: z.string({
 		required_error: 'URLを入力してください',
@@ -245,6 +264,7 @@ onMounted(async () => {
 						<TableBody>
 							<TableRow
 								v-for="crawlData in crawlDataList"
+								:id="crawlData.site_url === siteUrl ? 'targetRow' : undefined"
 								:key="crawlData.id"
 								:class="siteUrl === crawlData.site_url ? 'hover:bg-red-100 bg-red-100 dark:hover:bg-red-900 dark:bg-red-900' : ''"
 							>
