@@ -248,7 +248,7 @@ const toggleSidebar = () => {
 					<NuxtLink
 						to="/sitemap"
 						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						:class="routePath === '/sitemap' && 'bg-gray-100 dark:bg-gray-700'"
+						:class="routePath.includes('/sitemap') && 'bg-gray-100 dark:bg-gray-700'"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
