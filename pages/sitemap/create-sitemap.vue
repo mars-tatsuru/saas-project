@@ -24,13 +24,47 @@ const errorMessage = ref<string | null>(null);
 const VITE_CRAWL_API = import.meta.env.VITE_CRAWL_API;
 
 /************************************************
+ * Get crawl data from Supabase function
+ *************************************************/
+type CrawlData = {
+	id: string;
+	created_at: string;
+	site_url: string;
+	user_id: string;
+	json_data: any;
+	thumbnail_path: string;
+	number_of_crawled_page: string;
+	number_of_crawl_page: string;
+};
+
+const crawlDataList = ref<CrawlData[]>([]);
+const getDataFromSupabase = async () => {
+	const { data, error } = await client
+		.from('crawl_data')
+		.select('*')
+		.eq('user_id', user.value?.id).order('id', { ascending: false });
+
+	crawlDataList.value = data || [];
+
+	if (error) {
+		console.error('Failed to fetch user data:', error);
+		return;
+	}
+};
+
+/************************************************
  * Form schema
  *************************************************/
+const hasSameUrl = (url: string) => {
+	return crawlDataList.value.some(crawlData => crawlData.site_url === url || crawlData.site_url.includes(url));
+};
 const formSchema = toTypedSchema(z.object({
 	crawlUrl: z.string({
 		required_error: 'URLを入力してください',
 	}).url({
 		message: '有効なURLを入力してください',
+	}).refine(value => !hasSameUrl(value), {
+		message: '同じURLが既にクロールされています',
 	}),
 
 	numberOfCrawlPage: z.number({
@@ -105,35 +139,6 @@ const onCrawlSubmit = async () => {
 	}
 };
 
-/************************************************
- * Get crawl data from Supabase function
- *************************************************/
-type CrawlData = {
-	id: string;
-	created_at: string;
-	site_url: string;
-	user_id: string;
-	json_data: any;
-	thumbnail_path: string;
-	number_of_crawled_page: string;
-	number_of_crawl_page: string;
-};
-
-const crawlDataList = ref<CrawlData[]>([]);
-const getDataFromSupabase = async () => {
-	const { data, error } = await client
-		.from('crawl_data')
-		.select('*')
-		.eq('user_id', user.value?.id).order('id', { ascending: false });
-
-	crawlDataList.value = data || [];
-
-	if (error) {
-		console.error('Failed to fetch user data:', error);
-		return;
-	}
-};
-
 onMounted(async () => {
 	await getDataFromSupabase();
 });
@@ -149,9 +154,9 @@ onMounted(async () => {
 		/>
 
 		<!-- form and crawl data -->
-		<div class="mt-4 flex min-h-[calc(100vh-12rem)] w-full gap-6 rounded-md border border-gray-200 bg-white p-6 dark:border-[#4c4c4c] dark:bg-[#1f1f1f]">
+		<div class="mt-4 flex min-h-[calc(100vh-12.5rem)] w-full gap-6 rounded-md border border-gray-200 bg-white p-6 dark:border-[#4c4c4c] dark:bg-[#1f1f1f]">
 			<!-- Form Section -->
-			<div class="flex h-[calc(100vh-14rem)] w-3/5">
+			<div class="flex h-[calc(100vh-17rem)] w-3/5">
 				<Form
 					class="flex w-full flex-col gap-8"
 					:validation-schema="formSchema"
@@ -224,7 +229,7 @@ onMounted(async () => {
 			<div class="w-[2px] self-stretch bg-gray-100" />
 
 			<!-- Results Table Section -->
-			<div class="flex h-[calc(100vh-14rem)] w-2/5 flex-col">
+			<div class="flex h-[calc(100vh-17rem)] w-2/5 flex-col">
 				<h3 class="mb-4 pt-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
 					クロール済URL
 				</h3>
@@ -241,11 +246,14 @@ onMounted(async () => {
 							<TableRow
 								v-for="crawlData in crawlDataList"
 								:key="crawlData.id"
+								:class="siteUrl === crawlData.site_url ? 'hover:bg-red-100 bg-red-100 dark:hover:bg-red-900 dark:bg-red-900' : ''"
 							>
 								<TableCell class="font-medium">
 									{{ crawlData.id }}
 								</TableCell>
-								<TableCell>{{ crawlData.site_url }}</TableCell>
+								<TableCell>
+									{{ crawlData.site_url }}
+								</TableCell>
 								<TableCell>{{ crawlData.number_of_crawl_page }}</TableCell>
 							</TableRow>
 						</TableBody>
