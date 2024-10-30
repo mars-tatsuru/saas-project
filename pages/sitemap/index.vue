@@ -41,6 +41,8 @@ type CrawlData = {
 	user_id: string;
 	json_data: any;
 	thumbnail_path: string;
+	number_of_crawled_page: string;
+	number_of_crawl_page: string;
 };
 
 const crawlDataList = ref<CrawlData[]>([]);
@@ -175,6 +177,7 @@ const deleteCrawlData = async () => {
 /***********************************************
  * Realtime data fetching
  ***********************************************/
+const crawlProgress = ref<number>(0);
 const fetchRealtimeData = () => {
 	try {
 		client
@@ -189,7 +192,7 @@ const fetchRealtimeData = () => {
 				(payload) => {
 					// insert
 					if (payload.eventType === 'INSERT') {
-						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new;
+						const { id, created_at, site_url, user_id, json_data, thumbnail_path, number_of_crawl_page, number_of_crawled_page } = payload.new;
 
 						if (user.value?.id !== user_id) {
 							return;
@@ -204,13 +207,17 @@ const fetchRealtimeData = () => {
 								user_id,
 								json_data,
 								thumbnail_path,
+								number_of_crawl_page,
+								number_of_crawled_page,
 							},
 						];
+
+						crawlProgress.value = 0;
 					}
 
 					// update
 					if (payload.eventType === 'UPDATE') {
-						const { id, created_at, site_url, user_id, json_data, thumbnail_path } = payload.new;
+						const { id, created_at, site_url, user_id, json_data, thumbnail_path, number_of_crawl_page, number_of_crawled_page } = payload.new;
 						crawlDataList.value = crawlDataList.value.map((item) => {
 							if (item.id === id) {
 								return {
@@ -220,10 +227,14 @@ const fetchRealtimeData = () => {
 									user_id,
 									json_data,
 									thumbnail_path,
+									number_of_crawl_page,
+									number_of_crawled_page,
 								};
 							}
 							return item;
 						});
+
+						crawlProgress.value = Number(number_of_crawled_page) / Number(number_of_crawl_page) * 100;
 					}
 
 					// delete
@@ -323,10 +334,19 @@ watchEffect(async () => {
 							<Skeleton
 								class="size-full rounded-none rounded-t-lg bg-gray-300 dark:bg-gray-800"
 							/>
-							<Icon
-								icon="eos-icons:loading"
-								class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400"
-							/>
+							<div class="absolute left-1/2 top-1/2 flex w-4/5 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-4">
+								<Icon
+									icon="eos-icons:loading"
+									class="size-12 text-gray-500 dark:text-gray-400"
+								/>
+								<Progress
+									v-model="crawlProgress"
+									class="w-full"
+								/>
+								<!-- <p class="font-normal text-gray-700 dark:text-gray-400">
+									{{ crawlData.number_of_crawled_page ? crawlData.number_of_crawled_page : 0 }} / {{ crawlData.number_of_crawl_page }}
+								</p> -->
+							</div>
 						</div>
 					</div>
 					<div class="flex flex-col justify-between p-3">
