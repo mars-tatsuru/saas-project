@@ -35,6 +35,7 @@ const formSchema = toTypedSchema(z.object({
 
 	numberOfCrawlPage: z.number({
 		required_error: 'クロール数を入力してください',
+		invalid_type_error: '数値を入力してください',
 	}).default(numberOfCrawlPage.value),
 }));
 
@@ -69,10 +70,11 @@ const onCrawlSubmit = async () => {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		setTimeout(() => {
+		setTimeout(async () => {
 			// Reset form
 			isLoading.value = false;
 			siteUrl.value = '';
+			await getDataFromSupabase();
 
 			// Show success toast
 			toast({
@@ -132,86 +134,8 @@ const getDataFromSupabase = async () => {
 	}
 };
 
-const fetchRealtimeData = () => {
-	try {
-		client
-			.channel('SaaS-kit') // 任意のチャンネル名
-			.on(
-				'postgres_changes',
-				{
-					event: '*',
-					schema: 'public',
-					table: 'crawl_data',
-				},
-				(payload) => {
-					// insert
-					if (payload.eventType === 'INSERT') {
-						const { id, created_at, site_url, user_id, json_data, thumbnail_path, number_of_crawl_page, number_of_crawled_page } = payload.new;
-
-						if (user.value?.id !== user_id) {
-							return;
-						}
-
-						crawlDataList.value = [
-							...crawlDataList.value,
-							{
-								id,
-								created_at,
-								site_url,
-								user_id,
-								json_data,
-								thumbnail_path,
-								number_of_crawl_page,
-								number_of_crawled_page,
-							},
-						];
-					}
-
-					// update
-					if (payload.eventType === 'UPDATE') {
-						const { id, created_at, site_url, user_id, json_data, thumbnail_path, number_of_crawl_page, number_of_crawled_page } = payload.new;
-						crawlDataList.value = crawlDataList.value.map((item) => {
-							if (item.id === id) {
-								return {
-									id,
-									created_at,
-									site_url,
-									user_id,
-									json_data,
-									thumbnail_path,
-									number_of_crawl_page,
-									number_of_crawled_page,
-								};
-							}
-							return item;
-						});
-					}
-
-					// delete
-					if (payload.eventType === 'DELETE') {
-						const { id } = payload.old;
-						crawlDataList.value = crawlDataList.value.filter(item => item.id !== id);
-					}
-				},
-			)
-			.subscribe();
-
-		// リスナーの解除
-		return () => client.channel('SaaS-kit').unsubscribe();
-	}
-	catch (error) {
-		// console.error(error);
-	}
-};
-
 onMounted(async () => {
 	await getDataFromSupabase();
-});
-
-watchEffect(async () => {
-	if (user.value) {
-		fetchRealtimeData();
-	}
 });
 </script>
 
@@ -297,11 +221,11 @@ watchEffect(async () => {
 			</div>
 
 			<!-- Divider -->
-			<div class="w-1 self-stretch bg-gray-100" />
+			<div class="w-[2px] self-stretch bg-gray-100" />
 
 			<!-- Results Table Section -->
 			<div class="flex h-[calc(100vh-14rem)] w-2/5 flex-col">
-				<h3 class="mb-4 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+				<h3 class="mb-4 pt-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
 					クロール済URL
 				</h3>
 				<div class="grow overflow-auto">

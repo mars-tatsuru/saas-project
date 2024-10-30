@@ -335,10 +335,13 @@ watchEffect(async () => {
 								class="size-full rounded-none rounded-t-lg bg-gray-300 dark:bg-gray-800"
 							/>
 							<div class="absolute left-1/2 top-1/2 flex w-4/5 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-4">
-								<Icon
+								<!-- <Icon
 									icon="eos-icons:loading"
 									class="size-12 text-gray-500 dark:text-gray-400"
-								/>
+								/> -->
+								<p class="text-sm">
+									now crawling...
+								</p>
 								<Progress
 									v-model="crawlProgress"
 									class="w-full"
