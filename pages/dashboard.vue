@@ -132,6 +132,7 @@ const slotClasses = {
 		<PageHeader
 			title="Dashboard"
 			href="https://zenn.dev/tatausuru/articles/a1b8e016686b04"
+			target="_blank"
 			label="Swapyでdashboardを作ろう"
 		/>
 

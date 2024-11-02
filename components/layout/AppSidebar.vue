@@ -45,7 +45,6 @@ watch(() => route.path, (path) => {
 onMounted(() => {
 	// set sidebar open/close
 	store.isSidebarOpen = JSON.parse(localStorage.getItem('isSidebarOpen') || 'true');
-	// sidebar.value?.classList.toggle('!w-16', !store.isSidebarOpen);
 });
 
 /************************
@@ -68,7 +67,7 @@ const toggleSidebar = () => {
 		id="logo-sidebar"
 		ref="sidebar"
 		:class="[
-			'fixed left-0 top-0 z-40 grid h-screen grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3 duration-300 dark:border-[#4c4c4c] dark:bg-[#171717] sm:translate-x-0',
+			'fixed left-0 top-0 z-40 grid h-screen w-64 grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3  duration-300 dark:border-[#4c4c4c] dark:bg-[#171717] sm:translate-x-0',
 			{ 'w-64': store.isSidebarOpen, '!w-16': !store.isSidebarOpen },
 		]"
 		aria-label="Sidebar"

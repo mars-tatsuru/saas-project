@@ -167,7 +167,7 @@ onMounted(async () => {
 	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
 		<!-- header -->
 		<PageHeader
-			title="サイトマップ作成"
+			title="Create Sitemap"
 			href="/sitemap"
 			label="サイトマップ一覧に戻る"
 		/>

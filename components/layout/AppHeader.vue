@@ -101,7 +101,7 @@ onMounted(async () => {
 	<nav
 		ref="header"
 		:class="[
-			'fixed right-0 top-0 z-50 border-b border-gray-200 bg-white duration-300 dark:border-[#4c4c4c] dark:bg-[#171717]',
+			'fixed right-0 top-0 z-50 border-b border-gray-200 bg-white  duration-300 dark:border-[#4c4c4c] dark:bg-[#171717]',
 			{ 'md:w-[calc(100%-4rem)]': !store.isSidebarOpen, 'md:w-[calc(100%-16rem)]': store.isSidebarOpen },
 		]"
 	>
@@ -142,13 +142,13 @@ onMounted(async () => {
 		<Card
 			v-if="isProfileCardOpen"
 			ref="target"
-			class="absolute right-4 top-16 w-[350px] dark:bg-slate-900"
+			class="absolute right-4 top-16 w-[350px] dark:bg-[#1f1f1f]"
 		>
 			<CardHeader class="relative">
 				<CardTitle>Profile</CardTitle>
 				<CardDescription>現在ログイン中のユーザー情報</CardDescription>
 				<Button
-					class="absolute right-6 top-6 h-fit border-none p-2 dark:bg-slate-900"
+					class="absolute right-6 top-6 h-fit border-none p-2 dark:bg-[#1f1f1f]"
 					variant="outline"
 					@click="closeProfile"
 				>

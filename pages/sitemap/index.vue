@@ -268,7 +268,7 @@ watchEffect(async () => {
 	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
 		<!-- header -->
 		<PageHeader
-			title="site map"
+			title="Sitemap"
 			href="/sitemap/create-sitemap"
 			label="サイトマップを作成"
 		/>

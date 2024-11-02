@@ -2,6 +2,7 @@
 const props = defineProps<{
 	title: string;
 	href: string;
+	target?: string;
 	label: string;
 }>();
 </script>
@@ -20,6 +21,7 @@ const props = defineProps<{
 			<NuxtLink
 				v-if="props.href && props.label"
 				:to="props.href"
+				:target="props.target"
 			>
 				{{ props.label }}
 			</NuxtLink>

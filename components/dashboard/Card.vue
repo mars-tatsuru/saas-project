@@ -43,7 +43,7 @@ watch(
 
 <template>
 	<div
-		class="item relative flex size-full select-none items-center justify-center rounded-md border border-gray-200 bg-white text-4xl text-gray-700 shadow-md dark:border-[#4c4c4c] dark:bg-[#1f1f1f] dark:text-gray-300 dark:shadow-lg"
+		class="relative flex size-full select-none items-center justify-center rounded-md border border-gray-200 bg-white text-4xl text-gray-700 shadow-md dark:border-[#4c4c4c] dark:bg-[#1f1f1f] dark:text-gray-300 dark:shadow-lg"
 		:data-swapy-item="props.dataSwapyItem"
 	>
 		<div
@@ -70,7 +70,7 @@ watch(
 		<Dropdown @update-content="updateContent" />
 		<div
 			v-if="setContent === 'API Usage'"
-			class="item-card started relative size-full px-1 pt-8"
+			class="relative size-full max-h-64 px-6 pt-12"
 		>
 			<ColumnChart />
 		</div>

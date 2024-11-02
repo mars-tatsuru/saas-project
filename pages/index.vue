@@ -17,8 +17,12 @@ definePageMeta({
 
 <template>
 	<div class="container relative z-10 h-full max-w-none gap-5 p-0">
-		<h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-			HOME
-		</h1>
+		<!-- header -->
+		<PageHeader
+			title="HOME"
+			href="https://zenn.dev/tatausuru/"
+			target="_blank"
+			label="Zenn"
+		/>
 	</div>
 </template>
