@@ -89,7 +89,7 @@ const formSchema = toTypedSchema(z.object({
 	numberOfCrawlPage: z.number({
 		required_error: 'クロール数を入力してください',
 		invalid_type_error: '数値を入力してください',
-	}).default(numberOfCrawlPage.value),
+	}).min(1, '0以上の数値を入力してください'),
 }));
 
 /************************************************
@@ -268,7 +268,7 @@ onMounted(async () => {
 								v-for="crawlData in crawlDataList"
 								:id="crawlData.site_url === siteUrl ? 'targetRow' : undefined"
 								:key="crawlData.id"
-								:class="siteUrl === crawlData.site_url ? 'hover:bg-red-100 bg-red-100 dark:hover:bg-red-900 dark:bg-red-900' : ''"
+								:class="siteUrl === crawlData.site_url || siteUrl.includes(crawlData.site_url) ? 'hover:bg-red-100 bg-red-100 dark:hover:bg-red-900 dark:bg-red-900' : ''"
 							>
 								<TableCell class="font-medium">
 									{{ crawlData.id }}
