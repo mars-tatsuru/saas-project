@@ -10,7 +10,7 @@ export const useStore = defineStore('sidebar', () => {
 	/************************************************
    * Sidebar state
    *************************************************/
-	const isSidebarOpen = ref<boolean>(true);
+	const isSidebarOpen = ref<boolean>();
 
 	/************************************************
    * user's data

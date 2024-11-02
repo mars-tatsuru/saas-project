@@ -127,24 +127,33 @@ const slotClasses = {
 </script>
 
 <template>
-	<div
-		v-if="isReady"
-		class="container relative z-10 grid h-full max-w-none grid-cols-3 grid-rows-[1fr_1fr_1fr] gap-5 p-0"
-	>
+	<div class="relative z-10 h-full max-w-none gap-5 p-0">
+		<!-- header -->
+		<PageHeader
+			title="Dashboard"
+			href="https://zenn.dev/tatausuru/articles/a1b8e016686b04"
+			label="Swapyでdashboardを作ろう"
+		/>
+
 		<div
-			v-for="slotId in Object.keys(slotItems)"
-			:key="slotId"
-			:class="[
-				'slot min-h-64 rounded-md border border-gray-200 bg-gray-300 dark:border-gray-700 dark:bg-gray-800',
-				slotClasses[slotId as unknown as keyof typeof slotClasses],
-			]"
-			:data-swapy-slot="slotId"
+			class="container relative z-10 mt-4 grid h-full max-w-none grid-cols-3 grid-rows-[1fr_1fr_1fr] gap-5 p-0"
 		>
-			<component
-				:is="getItemById(slotItems[slotId]).component"
-				v-bind="getItemById(slotItems[slotId]).props"
-				@update-card-data="updateCardData"
-			/>
+			<div
+				v-for="slotId in Object.keys(slotItems)"
+				:key="slotId"
+				:class="[
+					// slot
+					'min-h-64 rounded-md border border-gray-200 bg-gray-300 dark:border-gray-700 dark:bg-gray-800',
+					slotClasses[slotId as unknown as keyof typeof slotClasses],
+				]"
+				:data-swapy-slot="slotId"
+			>
+				<component
+					:is="getItemById(slotItems[slotId]).component"
+					v-bind="getItemById(slotItems[slotId]).props"
+					@update-card-data="updateCardData"
+				/>
+			</div>
 		</div>
 	</div>
 </template>

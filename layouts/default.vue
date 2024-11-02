@@ -29,7 +29,9 @@ watch(
 		<!-- Main -->
 		<div
 			ref="main"
-			class="ml-auto min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 dark:bg-[#171717] md:w-[calc(100%-16rem)] md:p-4 md:pt-20"
+			:class="['ml-auto min-h-screen bg-slate-100 px-4 py-0 transition-all duration-300 dark:bg-[#171717] md:w-[calc(100%-16rem)] md:p-4 md:pt-20',
+				!store.isSidebarOpen ? 'md:w-[calc(100%-4rem)]' : 'md:w-[calc(100%-16rem)]',
+			]"
 		>
 			<div
 				class="hidden min-h-[calc(100vh-5.5rem)] w-full dark:border-gray-700 md:block"

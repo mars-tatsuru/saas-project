@@ -45,7 +45,7 @@ watch(() => route.path, (path) => {
 onMounted(() => {
 	// set sidebar open/close
 	store.isSidebarOpen = JSON.parse(localStorage.getItem('isSidebarOpen') || 'true');
-	sidebar.value?.classList.toggle('!w-16', !store.isSidebarOpen);
+	// sidebar.value?.classList.toggle('!w-16', !store.isSidebarOpen);
 });
 
 /************************
@@ -67,9 +67,13 @@ const toggleSidebar = () => {
 	<aside
 		id="logo-sidebar"
 		ref="sidebar"
-		class="fixed left-0 top-0 z-40 grid h-screen w-64 grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3 transition duration-300 dark:border-[#4c4c4c] dark:bg-[#171717] sm:translate-x-0"
+		:class="[
+			'fixed left-0 top-0 z-40 grid h-screen grid-cols-1 grid-rows-[60px_1fr] gap-4 border-r border-gray-200 bg-white px-3 duration-300 dark:border-[#4c4c4c] dark:bg-[#171717] sm:translate-x-0',
+			{ 'w-64': store.isSidebarOpen, '!w-16': !store.isSidebarOpen },
+		]"
 		aria-label="Sidebar"
 	>
+		<!-- Logo -->
 		<div class="flex items-center justify-between rtl:justify-end">
 			<NuxtLink
 				to="/"
@@ -105,10 +109,13 @@ const toggleSidebar = () => {
 				</svg>
 			</button>
 		</div>
+
+		<!-- Main -->
 		<div
 			class="relative grid h-full grid-cols-1 grid-rows-[1fr_100px] bg-white pb-4 dark:bg-[#171717]"
 		>
 			<ul class="w-full space-y-2 overflow-y-auto font-medium">
+				<!-- HOME -->
 				<li>
 					<NuxtLink
 						to="/"
@@ -135,6 +142,8 @@ const toggleSidebar = () => {
 						</span>
 					</NuxtLink>
 				</li>
+
+				<!-- DASHBOARD -->
 				<li>
 					<NuxtLink
 						to="/dashboard"
@@ -171,7 +180,9 @@ const toggleSidebar = () => {
 						</span>
 					</NuxtLink>
 				</li>
-				<li>
+
+				<!-- API -->
+				<!-- <li>
 					<button
 						type="button"
 						class="group flex w-full items-center rounded-lg p-2 text-base text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -243,7 +254,9 @@ const toggleSidebar = () => {
 							</NuxtLink>
 						</li>
 					</ul>
-				</li>
+				</li> -->
+
+				<!-- SITEMAP -->
 				<li>
 					<NuxtLink
 						to="/sitemap"
@@ -274,6 +287,7 @@ const toggleSidebar = () => {
 			<ul
 				class="w-full space-y-2 border-t border-gray-200 pt-4 font-medium dark:border-gray-700"
 			>
+				<!-- SETTING -->
 				<li>
 					<NuxtLink
 						to="/setting"
@@ -300,6 +314,8 @@ const toggleSidebar = () => {
 						</span>
 					</NuxtLink>
 				</li>
+
+				<!-- SIGN OUT -->
 				<li>
 					<a
 						class="group flex cursor-pointer items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
