@@ -11,9 +11,14 @@ const user = useSupabaseUser();
  * add userData into store
  *************************/
 const mode = useColorMode();
+const colorMode = useCookie('color-mode');
 const toggleColorMode = () => {
 	const modeType = mode.value === 'light' ? 'dark' : 'light';
+	// change color mode
 	mode.value = modeType;
+	// add color mode into cookie
+	colorMode.value = modeType;
+	// add color mode into localStorage
 	localStorage.setItem('color-mode', modeType);
 };
 

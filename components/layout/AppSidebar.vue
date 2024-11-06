@@ -48,6 +48,7 @@ watch(() => route.path, (path) => {
 const isSidebarOpen = useCookie('sidebar');
 isSidebarOpen.value = isSidebarOpen.value ? 'true' : 'false';
 
+// from cookie
 store.isSidebarOpen = isSidebarOpen.value === 'true' ? true : false;
 
 const sidebar = ref<HTMLElement | null>(null);
