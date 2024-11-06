@@ -42,17 +42,19 @@ watch(() => route.path, (path) => {
 	routePath.value = path;
 });
 
-onMounted(() => {
-	// set sidebar open/close
-	store.isSidebarOpen = JSON.parse(localStorage.getItem('isSidebarOpen') || 'true');
-});
-
 /************************
  * sidebar toggle
  *************************/
+const isSidebarOpen = useCookie('sidebar');
+isSidebarOpen.value = isSidebarOpen.value ? 'true' : 'false';
+
+store.isSidebarOpen = isSidebarOpen.value === 'true' ? true : false;
+
 const sidebar = ref<HTMLElement | null>(null);
 const toggleSidebar = () => {
 	store.isSidebarOpen = !store.isSidebarOpen;
+	isSidebarOpen.value = store.isSidebarOpen.toString();
+
 	sidebar.value?.classList.toggle('!w-16');
 
 	isOpen.value = false;
