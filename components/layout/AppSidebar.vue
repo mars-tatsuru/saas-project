@@ -93,7 +93,7 @@ const toggleSidebar = () => {
 				data-drawer-toggle="logo-sidebar"
 				aria-controls="logo-sidebar"
 				type="button"
-				class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+				class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-[#1e1e1e] dark:focus:ring-gray-600"
 				@click="toggleSidebar"
 			>
 				<svg
@@ -121,8 +121,8 @@ const toggleSidebar = () => {
 				<li>
 					<NuxtLink
 						to="/"
-						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						:class="routePath === '/' && 'bg-gray-100 dark:bg-gray-700'"
+						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
+						:class="routePath === '/' && 'bg-gray-100 dark:bg-[#1e1e1e]'"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -149,8 +149,8 @@ const toggleSidebar = () => {
 				<li>
 					<NuxtLink
 						to="/dashboard"
-						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						:class="routePath === '/dashboard' && 'bg-gray-100 dark:bg-gray-700'"
+						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
+						:class="routePath === '/dashboard' && 'bg-gray-100 dark:bg-[#1e1e1e]'"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -187,10 +187,10 @@ const toggleSidebar = () => {
 				<!-- <li>
 					<button
 						type="button"
-						class="group flex w-full items-center rounded-lg p-2 text-base text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+						class="group flex w-full items-center rounded-lg p-2 text-base text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
 						aria-controls="dropdown-example"
 						data-collapse-toggle="dropdown-example"
-						:class="routePath === '/api' || routePath === '/api-market' ? 'bg-gray-100 dark:bg-gray-700' : ''"
+						:class="routePath === '/api' || routePath === '/api-market' ? 'bg-gray-100 dark:bg-[#1e1e1e]' : ''"
 						@click="openMenu"
 					>
 						<svg
@@ -238,8 +238,8 @@ const toggleSidebar = () => {
 						>
 							<NuxtLink
 								to="/api"
-								class="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-								:class="routePath === '/api' && 'bg-gray-100 dark:bg-gray-700'"
+								class="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
+								:class="routePath === '/api' && 'bg-gray-100 dark:bg-[#1e1e1e]'"
 							>
 								TOP
 							</NuxtLink>
@@ -249,8 +249,8 @@ const toggleSidebar = () => {
 						>
 							<NuxtLink
 								to="/api-market"
-								class="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-								:class="routePath === '/api-market' && 'bg-gray-100 dark:bg-gray-700'"
+								class="group flex w-full items-center rounded-lg p-2 pl-11 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
+								:class="routePath === '/api-market' && 'bg-gray-100 dark:bg-[#1e1e1e]'"
 							>
 								API MARKET
 							</NuxtLink>
@@ -262,8 +262,8 @@ const toggleSidebar = () => {
 				<li>
 					<NuxtLink
 						to="/sitemap"
-						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						:class="routePath.includes('/sitemap') && 'bg-gray-100 dark:bg-gray-700'"
+						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
+						:class="routePath.includes('/sitemap') && 'bg-gray-100 dark:bg-[#1e1e1e]'"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -293,8 +293,8 @@ const toggleSidebar = () => {
 				<li>
 					<NuxtLink
 						to="/setting"
-						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-						:class="routePath === '/setting' && 'bg-gray-100 dark:bg-gray-700'"
+						class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
+						:class="routePath === '/setting' && 'bg-gray-100 dark:bg-[#171717]'"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +320,7 @@ const toggleSidebar = () => {
 				<!-- SIGN OUT -->
 				<li>
 					<a
-						class="group flex cursor-pointer items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+						class="group flex cursor-pointer items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-[#1e1e1e]"
 						@click="signOutWithGoogle"
 					>
 						<svg

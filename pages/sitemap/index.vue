@@ -335,10 +335,6 @@ watchEffect(async () => {
 								class="size-full rounded-none rounded-t-lg bg-gray-300 dark:bg-[#333333]"
 							/>
 							<div class="absolute left-1/2 top-1/2 flex w-4/5 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-4">
-								<!-- <Icon
-									icon="eos-icons:loading"
-									class="size-12 text-gray-500 dark:text-gray-400"
-								/> -->
 								<p class="text-sm font-normal text-gray-700 dark:text-gray-200">
 									now crawling...
 								</p>
@@ -346,9 +342,6 @@ watchEffect(async () => {
 									v-model="crawlProgress"
 									class="w-full"
 								/>
-								<!-- <p class="font-normal text-gray-700 dark:text-gray-400">
-									{{ crawlData.number_of_crawled_page ? crawlData.number_of_crawled_page : 0 }} / {{ crawlData.number_of_crawl_page }}
-								</p> -->
 							</div>
 						</div>
 					</div>

@@ -143,7 +143,7 @@ const slotClasses = {
 				v-for="slotId in Object.keys(slotItems)"
 				:key="slotId"
 				:class="[
-					'h-72 rounded-md border border-gray-200 bg-gray-300 dark:border-gray-700 dark:bg-gray-800',
+					'h-72 rounded-md border border-[#eeeeee] bg-[#171717] dark:border-[#171717] dark:bg-[#1E1E1E]',
 					slotClasses[slotId as unknown as keyof typeof slotClasses],
 				]"
 				:data-swapy-slot="slotId"

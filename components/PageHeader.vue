@@ -16,7 +16,7 @@ const props = defineProps<{
 		</h1>
 		<Button
 			as-child
-			class="bg-gradient-to-r from-[#4B81F5] to-[#2C4B8F] dark:from-white dark:to-white"
+			class="bg-gradient-to-r from-[#10B981] to-[#1C7C54] dark:from-white dark:to-white"
 		>
 			<NuxtLink
 				v-if="props.href && props.label"

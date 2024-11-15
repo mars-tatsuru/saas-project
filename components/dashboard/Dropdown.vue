@@ -39,7 +39,7 @@ const selectItems = ref([
 		<DropdownMenuTrigger as-child>
 			<Button
 				variant="outline"
-				class="h-fit p-2"
+				class="h-fit p-2 dark:border-[#2e2e2e] dark:bg-[#1e1e1e] dark:hover:bg-[#2e2e2e]"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ const selectItems = ref([
 				</svg>
 			</Button>
 		</DropdownMenuTrigger>
-		<DropdownMenuContent class="w-56">
+		<DropdownMenuContent class="w-56 dark:border-[#2e2e2e] dark:bg-[#171717]">
 			<DropdownMenuLabel>コンテンツ</DropdownMenuLabel>
 			<DropdownMenuSeparator />
 			<DropdownMenuCheckboxItem

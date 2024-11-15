@@ -239,7 +239,7 @@ onMounted(async () => {
 					<!-- Submit Button -->
 					<Button
 						type="submit"
-						class="w-44 bg-gradient-to-r from-[#4B81F5] to-[#2C4B8F] dark:from-white dark:to-white"
+						class="w-44 bg-gradient-to-r from-[#10B981] to-[#1C7C54] dark:from-white dark:to-white"
 					>
 						{{ isLoading ? 'リクエスト中...' : 'サイトマップ作成' }}
 					</Button>

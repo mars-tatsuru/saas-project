@@ -24,6 +24,7 @@ const data = [
 		}"
 		:type="'grouped'"
 		class="size-full pb-6"
+		:colors="['#1C7C54', '#10B981']"
 	/>
 </template>
 
