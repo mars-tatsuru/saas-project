@@ -97,9 +97,8 @@ watch(
 			/>
 			<div
 				v-else
-				class="text-4xl"
 			>
-				{{ setContent }}
+				コンテンツが選択されてません。
 			</div>
 		</CardContent>
 	</Card>
