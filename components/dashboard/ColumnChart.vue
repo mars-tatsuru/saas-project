@@ -13,9 +13,6 @@ const data = [
 </script>
 
 <template>
-	<h3 class="absolute left-4 top-4 text-2xl">
-		API Usage
-	</h3>
 	<BarChart
 		index="name"
 		:data="data"
@@ -26,7 +23,7 @@ const data = [
 				: ''
 		}"
 		:type="'grouped'"
-		class="h-36 w-full"
+		class="size-full pb-6"
 	/>
 </template>
 

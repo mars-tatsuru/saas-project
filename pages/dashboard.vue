@@ -143,13 +143,12 @@ const slotClasses = {
 				v-for="slotId in Object.keys(slotItems)"
 				:key="slotId"
 				:class="[
-					// slot
-					'min-h-64 rounded-md border border-gray-200 bg-gray-300 dark:border-gray-700 dark:bg-gray-800',
+					'h-64 rounded-md border border-gray-200 bg-gray-300 dark:border-gray-700 dark:bg-gray-800',
 					slotClasses[slotId as unknown as keyof typeof slotClasses],
 				]"
 				:data-swapy-slot="slotId"
 			>
-				<component
+				<Card
 					:is="getItemById(slotItems[slotId]).component"
 					v-bind="getItemById(slotItems[slotId]).props"
 					@update-card-data="updateCardData"

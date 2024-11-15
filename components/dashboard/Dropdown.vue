@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core';
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 // open/close dropdown
 const isOpen = ref(false);
@@ -26,52 +34,41 @@ const selectItems = ref([
 </script>
 
 <template>
-	<button
-		id="multiLevelDropdownButton"
-		ref="target"
-		data-dropdown-toggle="multi-dropdown"
-		class="absolute right-12 top-4 z-10 rounded-lg border border-gray-200 bg-white p-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-400 dark:hover:bg-[#171717] dark:hover:text-white dark:focus:ring-gray-700"
-		type="button"
-		@click="toggleDropdown"
-	>
-		<svg
-			class="size-2"
-			aria-hidden="true"
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 10 6"
-		>
-			<path
-				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="m1 1 4 4 4-4"
-			/>
-		</svg>
-	</button>
-
 	<!-- Dropdown menu -->
-	<div
-		id="multi-dropdown"
-		class="absolute right-12 top-14 z-10 w-44 divide-y divide-gray-100 rounded-lg border bg-white shadow dark:border-[#4c4c4c] dark:bg-[#1f1f1f]"
-		:class="isOpen ? 'block' : 'hidden'"
-	>
-		<ul
-			class="py-2 text-sm text-gray-700 dark:text-gray-200"
-			aria-labelledby="multiLevelDropdownButton"
-		>
-			<li
+	<DropdownMenu>
+		<DropdownMenuTrigger as-child>
+			<Button
+				variant="outline"
+				class="h-fit p-2"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="1em"
+					height="1em"
+					viewBox="0 0 24 24"
+				>
+					<g
+						fill="none"
+						fill-rule="evenodd"
+					>
+						<path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path
+							fill="currentColor"
+							d="M13.06 16.06a1.5 1.5 0 0 1-2.12 0l-5.658-5.656a1.5 1.5 0 1 1 2.122-2.121L12 12.879l4.596-4.596a1.5 1.5 0 0 1 2.122 2.12l-5.657 5.658Z"
+						/>
+					</g>
+				</svg>
+			</Button>
+		</DropdownMenuTrigger>
+		<DropdownMenuContent class="w-56">
+			<DropdownMenuLabel>コンテンツ</DropdownMenuLabel>
+			<DropdownMenuSeparator />
+			<DropdownMenuCheckboxItem
 				v-for="items in selectItems"
 				:key="items.id"
 				@click="updateContent(`${items.name}`)"
 			>
-				<span
-					class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#525252] dark:hover:text-white"
-				>
-					{{ items.name }}
-				</span>
-			</li>
-		</ul>
-	</div>
+				{{ items.name }}
+			</DropdownMenuCheckboxItem>
+		</DropdownMenuContent>
+	</DropdownMenu>
 </template>
