@@ -31,6 +31,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/supabase',
 		'shadcn-nuxt',
 		'@nuxtjs/color-mode',
+		'@nuxt/icon',
 	],
 
 	// tailwind: https://nuxt.com/docs/getting-started/configuration#external-configuration-files
