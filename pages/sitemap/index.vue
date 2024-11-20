@@ -283,43 +283,60 @@ watchEffect(async () => {
 				<CardContent
 					class="relative p-0"
 				>
-					<AlertDialog
-						:open="isAlertOpen"
-					>
-						<AlertDialogTrigger as-child>
-							<Button
+					<div class="absolute right-3 top-3 z-30 flex h-fit gap-2">
+						<Button
+							variant="outline"
+							class="p-2"
+						>
+							<NuxtLink
 								v-if="crawlData.json_data"
-								variant="outline"
-								class="absolute right-3 top-3 z-30 h-fit p-0"
-								@click.prevent="openModal(crawlData)"
+								:to="`/sitemap/setting/${crawlData.id}`"
+								class="flex items-center justify-center gap-3 font-bold underline"
 							>
 								<Icon
-									icon="radix-icons:trash"
+									icon="uil:setting"
 									class="size-6 rounded-md dark:bg-[#1f1f1f]"
 								/>
-							</Button>
-						</AlertDialogTrigger>
-						<AlertDialogContent>
-							<AlertDialogHeader>
-								<AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
-								<AlertDialogDescription>
-									一度削除すると元に戻すことはできません。
-								</AlertDialogDescription>
-							</AlertDialogHeader>
-							<AlertDialogFooter>
-								<AlertDialogCancel
-									@click="closeModal"
+							</NuxtLink>
+						</Button>
+						<AlertDialog
+							:open="isAlertOpen"
+						>
+							<AlertDialogTrigger as-child>
+								<Button
+									v-if="crawlData.json_data"
+									variant="outline"
+									class="p-2"
+									@click.prevent="openModal(crawlData)"
 								>
-									戻る
-								</AlertDialogCancel>
-								<AlertDialogAction
-									@click="deleteCrawlData"
-								>
-									{{ isLoading ? '削除中...' : '削除する' }}
-								</AlertDialogAction>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
+									<Icon
+										icon="radix-icons:trash"
+										class="size-6 rounded-md dark:bg-[#1f1f1f]"
+									/>
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+									<AlertDialogDescription>
+										一度削除すると元に戻すことはできません。
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel
+										@click="closeModal"
+									>
+										戻る
+									</AlertDialogCancel>
+									<AlertDialogAction
+										@click="deleteCrawlData"
+									>
+										{{ isLoading ? '削除中...' : '削除する' }}
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
+					</div>
 					<div class="relative h-52 w-full overflow-hidden">
 						<NuxtImg
 							v-if="crawlData.thumbnail_path"
