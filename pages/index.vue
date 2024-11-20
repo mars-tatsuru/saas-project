@@ -128,7 +128,7 @@ function onSubmit(values: any) {
 				<pre>{{ analytics }}</pre>
 			</div> -->
 
-			<Form
+			<!-- <Form
 				v-slot="{ meta, values, validate }"
 				as=""
 				keep-values
@@ -329,7 +329,7 @@ function onSubmit(values: any) {
 						</div>
 					</form>
 				</Stepper>
-			</Form>
+			</Form> -->
 		</div>
 	</div>
 </template>
