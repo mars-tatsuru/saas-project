@@ -270,6 +270,43 @@ onMounted(async () => {
 								</PopoverContent>
 							</Popover>
 						</div>
+						<div class="flex flex-col items-start gap-4">
+							<h3 class="text-xl font-bold">
+								何かしらのデータ(仮)
+							</h3>
+							<Popover>
+								<PopoverTrigger as-child>
+									<Button
+										variant="outline"
+										:class="!calendarValue && 'text-muted-foreground'"
+										class="w-[280px] justify-start text-left font-normal"
+										:disabled="!analyticsGraphData.length"
+									>
+										<CalendarIcon class="mr-2 size-4" />
+										<template v-if="calendarValue.start">
+											<template v-if="calendarValue.end">
+												{{ df.format(calendarValue.start.toDate(getLocalTimeZone())) }} - {{ df.format(calendarValue.end.toDate(getLocalTimeZone())) }}
+											</template>
+
+											<template v-else>
+												{{ df.format(calendarValue.start.toDate(getLocalTimeZone())) }}
+											</template>
+										</template>
+										<template v-else>
+											Pick a date
+										</template>
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent class="w-auto p-0">
+									<RangeCalendar
+										v-model="calendarValue"
+										initial-focus
+										:number-of-months="2"
+										@update:start-value="(startDate) => calendarValue.start = startDate"
+									/>
+								</PopoverContent>
+							</Popover>
+						</div>
 						<BarChart
 							v-if="analyticsGraphData.length > 0"
 							index="name"
