@@ -285,11 +285,11 @@ watchEffect(async () => {
 				>
 					<div class="absolute right-3 top-3 z-30 flex h-fit gap-2">
 						<Button
+							v-if="crawlData.json_data"
 							variant="outline"
 							class="p-2"
 						>
 							<NuxtLink
-								v-if="crawlData.json_data"
 								:to="`/sitemap/setting/${crawlData.id}`"
 								class="flex items-center justify-center gap-3 font-bold underline"
 							>
