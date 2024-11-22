@@ -270,9 +270,29 @@ onMounted(async () => {
 								</PopoverContent>
 							</Popover>
 						</div>
+						<BarChart
+							v-if="analyticsGraphData.length > 0"
+							index="name"
+							:data="analyticsGraphData"
+							:categories="['pageView']"
+							:type="'stacked'"
+							class="size-full shrink-0 pb-6"
+							:colors="['#10B981']"
+						/>
+						<p
+							v-else
+							class="text-sm text-muted-foreground"
+						>
+							アナリティクスデータがありません。<br>
+							アナリティクス設定からデータを取得してください。
+						</p>
+					</div>
+					<div
+						class="grid size-full grid-rows-[auto,auto,1fr] gap-10"
+					>
 						<div class="flex flex-col items-start gap-4">
 							<h3 class="text-xl font-bold">
-								何かしらのデータ(仮)
+								ページビュー数
 							</h3>
 							<Popover>
 								<PopoverTrigger as-child>
