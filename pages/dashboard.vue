@@ -4,11 +4,11 @@ import { createSwapy } from 'swapy';
 import Card from '@/components/dashboard/Card.vue';
 
 definePageMeta({
-	title: 'HOME',
+	title: 'Dashboard',
 });
 
 useHead({
-	title: 'HOME',
+	title: 'Dashboard',
 });
 
 /************************************************

@@ -27,6 +27,3 @@ const data = [
 		:colors="['#1C7C54', '#10B981']"
 	/>
 </template>
-
-<style>
-</style>

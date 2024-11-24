@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onClickOutside } from '@vueuse/core';
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -9,21 +8,11 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-// open/close dropdown
-const isOpen = ref(false);
-const emit = defineEmits(['updateContent']);
-const toggleDropdown = () => {
-	isOpen.value = !isOpen.value;
-};
-
 // emit event to parent for updating content
+const emit = defineEmits(['updateContent']);
 const updateContent = (content: string) => {
 	emit('updateContent', content);
 };
-
-// outside click to close dropdown
-const target = ref(null);
-onClickOutside(target, event => (isOpen.value = false));
 
 // select items
 const selectItems = ref([
