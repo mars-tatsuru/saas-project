@@ -12,6 +12,13 @@ useHead({
 	title: 'create-sitemap',
 });
 
+/************************************************
+ * Determine if the user is logged in
+ *************************************************/
+definePageMeta({
+	middleware: 'auth',
+});
+
 const client = useSupabaseClient();
 const { toast } = useToast();
 const router = useRouter();

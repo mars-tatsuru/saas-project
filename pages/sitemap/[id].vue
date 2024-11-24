@@ -13,12 +13,6 @@ const client = useSupabaseClient();
 const user = useSupabaseUser();
 const router = useRouter();
 
-// const checkAuth = () => {
-//   if (!user.value) {
-//     router.push('/login')
-//   }
-// }
-
 definePageMeta({
 	title: 'created-sitemap',
 });
@@ -90,6 +84,7 @@ const processData = (data: { [key: string]: TreeNode }, parentId?: string) => {
 		const nodeId = processId ? `${processId}-${key}` : `${key}`;
 
 		if (value.url) {
+			console.log(value.url);
 			nodes.push(createNode(nodeId, value, processId));
 		}
 
@@ -301,15 +296,6 @@ function resetTransform() {
 }
 
 /***********************************************************************
- * Toggles the dark mode
- ***********************************************************************/
-// our dark mode toggle flag
-const dark = ref(false);
-function toggleDarkMode() {
-	dark.value = !dark.value;
-}
-
-/***********************************************************************
  * Collapse the nodes
  ***********************************************************************/
 const collapseNode = (filterNodesPosition: any) => {
@@ -425,7 +411,6 @@ const removeTransitionStyle = () => {
 				v-show="isReadyRender"
 				:nodes="nodes"
 				:edges="edges"
-				:class="{ dark }"
 				@nodes-initialized="layoutGraph('TB')"
 			>
 				<Background
