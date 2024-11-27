@@ -40,8 +40,28 @@ type TreeNode = {
 	url?: string;
 	x?: number;
 	y?: number;
+	pageView?: number;
 	[key: string]: any; // To include children nodes
 };
+
+type CrawlData = {
+	created_at: string;
+	id: string;
+	json_data: { [key: string]: TreeNode };
+	number_of_crawl_pages: string;
+	number_of_crawled_page: string;
+	site_url: string;
+	thumbnail_path: string;
+	user_id: string;
+}[] | undefined;
+
+type analyticsData = {
+	date: string;
+	domainName: string;
+	pageView: string;
+}[];
+
+type CrawlDataAndAnalyticsData = { [key: string]: TreeNode };
 
 // use for checking if the nodes are initialized
 const isReadyRender = ref(false);
@@ -146,7 +166,7 @@ const {
 } = useVueFlow();
 
 // initial data
-const getSpecificCrawlDataFromSupabase = async () => {
+const getSpecificCrawlDataFromSupabase = async (): Promise<CrawlData> => {
 	const { data, error } = await client
 		.from('crawl_data')
 		.select('*')
@@ -164,6 +184,44 @@ const getSpecificCrawlDataFromSupabase = async () => {
 	}
 
 	return data;
+};
+
+// get analytics data
+const getSpecificGa4DataFromSupabase = async (): Promise<analyticsData> => {
+	const { data, error } = await client
+		.from('ga4_data')
+		.select('*')
+		.eq('id', params.id);
+
+	if (data && data?.length > 0) {
+		const combinedRows = data[0].analytics_data.reduce((acc: any[], item: any) => {
+			const existingRow = acc.find(row =>
+				row.date === item.date,
+			// row.date === item.date && row.domainName === item.domainName,
+			);
+
+			if (existingRow) {
+				existingRow.pageView = Number(existingRow.pageView) + Number(item.pageView);
+			}
+			else {
+				acc.push({
+					date: item.date,
+					domainName: item.domainName,
+					pageView: item.pageView,
+				});
+			}
+
+			return acc;
+		}, []);
+
+		return combinedRows.map((item: { date: string; domainName: string; pageView: string }) => ({
+			date: item.date,
+			domainName: item.domainName,
+			pageView: item.pageView,
+		}));
+	};
+
+	return [];
 };
 
 // const { nodes: initialNodes, edges: initialEdges } = processData(tree);
@@ -192,13 +250,105 @@ onInit(async (vueFlowInstance) => {
 onPaneReady(async (vueFlowInstance) => {
 	useStyledLog('2. onPaneReady');
 
-	await getSpecificCrawlDataFromSupabase().then((data) => {
+	const analyticsData = ref<analyticsData>([]);
+	const crawlData = ref<CrawlData>([]);
+	const crawlDataAndAnalyticsData = ref<any[]>([]);
+
+	analyticsData.value = await getSpecificGa4DataFromSupabase();
+	crawlData.value = await getSpecificCrawlDataFromSupabase();
+	console.log('crawlData', crawlData.value);
+	console.log('analyticsData', analyticsData.value);
+
+	// TODO: analyticsData + crawlData
+	// crawlDataAndAnalyticsDataは、crawlData.value[0]?.json_dataの中のurlとanalyticsDataの中のdomainNameが一致するものを取得する
+	// if (crawlData.value && crawlData.value[0]?.json_data) {
+	// 	crawlDataAndAnalyticsData.value =	Object.entries(crawlData.value[0]?.json_data).map((item: TreeNode) => {
+	// 		const domainName = analyticsData.value.find(data => data.domainName === item.url);
+
+	// 		if (!domainName) {
+	// 			return {
+	// 				...item,
+	// 				pageView: null,
+	// 			};
+	// 		}
+
+	// 		const loop = (item: TreeNode) => {
+	// 			if (Object.keys(item).length > 1) {
+	// 				const children = Object.entries(item).map(([key, value]) => {
+	// 					const domainName = analyticsData.value.find(data => data.domainName === value.url);
+
+	// 					if (!domainName) {
+	// 						return {
+	// 							...value,
+	// 							pageView: null,
+	// 						};
+	// 					}
+
+	// 					return {
+	// 						...value,
+	// 						pageView: domainName.pageView,
+	// 					};
+	// 				});
+
+	// 				return {
+	// 					...item,
+	// 					...children,
+	// 				};
+	// 			}
+
+	// 			return {
+	// 				...item,
+	// 				pageView: domainName.pageView,
+	// 			};
+	// 		};
+
+	// 		loop(item);
+
+	// 		return {
+	// 			...item,
+	// 			pageView: domainName.pageView,
+	// 		};
+	// 	});
+
+	// 	console.log('crawlDataAndAnalyticsData', crawlDataAndAnalyticsData.value);
+	// }
+
+	// if (crawlData.value?.[0]?.json_data) {
+	// 	const processNode = (node: TreeNode) => {
+	// 		console.log('node', node);
+	// 		const analytics = analyticsData.value.find(data => data.domainName === node.url);
+
+	// 		if (Object.keys(node).length > 1) {
+	// 			const processedChildren = Object.fromEntries(
+	// 				Object.entries(node).map(([key, value]) => [
+	// 					key,
+	// 					{
+	// 						...value,
+	// 						pageView: analyticsData.value.find(data => data.domainName === value.url)?.pageView ?? null,
+	// 					},
+	// 				]),
+	// 			);
+
+	// 			return { ...node, ...processedChildren };
+	// 		}
+
+	// 		return { ...node, pageView: analytics?.pageView ?? null };
+	// 	};
+
+	// 	crawlDataAndAnalyticsData.value = Object.entries(crawlData.value[0].json_data)
+	// 		.map(([key, value]) => processNode(value as TreeNode));
+
+	// 	console.log('crawlDataAndAnalyticsData', crawlDataAndAnalyticsData.value);
+	// }
+
+	// if crawlData has value, then process the data
+	if (crawlData.value && crawlData.value[0]?.json_data) {
 		const { nodes: specificNodes, edges: specificEdges } = processData(
-			data && data[0].json_data,
+			crawlData.value[0].json_data as { [key: string]: TreeNode },
 		);
 		nodes.value = specificNodes;
 		edges.value = specificEdges;
-	});
+	}
 
 	isReadyRender.value = true;
 
