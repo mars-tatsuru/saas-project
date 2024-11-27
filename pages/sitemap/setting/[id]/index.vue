@@ -41,7 +41,8 @@ const getSpecificGa4DataFromSupabase = async () => {
  * analytics graph
  ***************************************************/
 interface AnalyticsGraphData {
-	name: string;
+	date: string;
+	domainName: string;
 	pageView: number;
 }
 const analyticsGraphData = ref<AnalyticsGraphData[]>([]);
@@ -89,41 +90,41 @@ onMounted(async () => {
 		// set json key, property id, and analytics data
 		jsonKey.value = JSON.stringify(ga4Data[0].json_key);
 		propertyId.value = ga4Data[0].property_id;
-		analyticsData.value = ga4Data[0].analytics_data[0];
+		analyticsData.value = ga4Data[0].analytics_data;
 
-		// set analytics graph data
-		const sortedRows = [...analyticsData.value.rows].sort((a, b) =>
-			a.dimensionValues[0].value.localeCompare(b.dimensionValues[0].value),
-		);
+		const combinedRows = analyticsData.value.reduce((acc: any[], item: any) => {
+			const existingRow = acc.find(row =>
+				row.date === item.date,
+				// row.date === item.date && row.domainName === item.domainName,
+			);
 
-		// plus when the same date
-		const combinedRows = sortedRows.reduce((acc, item, index) => {
-			const accDate = acc[acc.length - 1]?.dimensionValues[0].value;
-			const itemDate = item.dimensionValues[0].value;
-
-			if (accDate === itemDate) {
-				acc[acc.length - 1].metricValues[0].value = Number(acc[acc.length - 1].metricValues[0].value) + Number(item.metricValues[0].value);
+			if (existingRow) {
+				existingRow.pageView = Number(existingRow.pageView) + Number(item.pageView);
 			}
 			else {
-				acc.push(item);
+				acc.push({
+					date: item.date,
+					domainName: item.domainName,
+					pageView: item.pageView,
+				});
 			}
+
 			return acc;
 		}, []);
 
-		combinedRows.forEach((item: any) => {
-			analyticsGraphData.value.push({
-				name: item.dimensionValues[0].value.slice(4).replace(/(\d{2})(\d{2})/, '$1/$2'),
-				pageView: item.metricValues[0].value,
-			});
-		});
+		analyticsGraphData.value = combinedRows.map((item: { date: string; domainName: string; pageView: string }) => ({
+			date: item.date,
+			// domainName: item.domainName,
+			pageView: item.pageView,
+		}));
 
 		// set calendar value
-		startYear.value = combinedRows[0].dimensionValues[0].value.slice(0, 4);
-		startMonth.value = combinedRows[0].dimensionValues[0].value.slice(4, 6);
-		startDay.value = combinedRows[0].dimensionValues[0].value.slice(6, 8);
-		endYear.value = combinedRows[combinedRows.length - 1].dimensionValues[0].value.slice(0, 4);
-		endMonth.value = combinedRows[combinedRows.length - 1].dimensionValues[0].value.slice(4, 6);
-		endDay.value = combinedRows[combinedRows.length - 1].dimensionValues[0].value.slice(6, 8);
+		startYear.value = ga4Data[0].analytics_data[0].date.slice(0, 4);
+		startMonth.value = ga4Data[0].analytics_data[0].date.slice(5, 7);
+		startDay.value = ga4Data[0].analytics_data[0].date.slice(8, 10);
+		endYear.value = ga4Data[0].analytics_data[ga4Data[0].analytics_data.length - 1].date.slice(0, 4);
+		endMonth.value = ga4Data[0].analytics_data[ga4Data[0].analytics_data.length - 1].date.slice(5, 7);
+		endDay.value = ga4Data[0].analytics_data[ga4Data[0].analytics_data.length - 1].date.slice(8, 10);
 
 		calendarValue.value = {
 			start: new CalendarDate(
@@ -272,64 +273,7 @@ onMounted(async () => {
 						</div>
 						<BarChart
 							v-if="analyticsGraphData.length > 0"
-							index="name"
-							:data="analyticsGraphData"
-							:categories="['pageView']"
-							:type="'stacked'"
-							class="size-full shrink-0 pb-6"
-							:colors="['#10B981']"
-						/>
-						<p
-							v-else
-							class="text-sm text-muted-foreground"
-						>
-							アナリティクスデータがありません。<br>
-							アナリティクス設定からデータを取得してください。
-						</p>
-					</div>
-					<div
-						class="grid size-full grid-rows-[auto,auto,1fr] gap-10"
-					>
-						<div class="flex flex-col items-start gap-4">
-							<h3 class="text-xl font-bold">
-								ページビュー数
-							</h3>
-							<Popover>
-								<PopoverTrigger as-child>
-									<Button
-										variant="outline"
-										:class="!calendarValue && 'text-muted-foreground'"
-										class="w-[280px] justify-start text-left font-normal"
-										:disabled="!analyticsGraphData.length"
-									>
-										<CalendarIcon class="mr-2 size-4" />
-										<template v-if="calendarValue.start">
-											<template v-if="calendarValue.end">
-												{{ df.format(calendarValue.start.toDate(getLocalTimeZone())) }} - {{ df.format(calendarValue.end.toDate(getLocalTimeZone())) }}
-											</template>
-
-											<template v-else>
-												{{ df.format(calendarValue.start.toDate(getLocalTimeZone())) }}
-											</template>
-										</template>
-										<template v-else>
-											Pick a date
-										</template>
-									</Button>
-								</PopoverTrigger>
-								<PopoverContent class="w-auto p-0">
-									<RangeCalendar
-										v-model="calendarValue"
-										initial-focus
-										:number-of-months="2"
-										@update:start-value="(startDate) => calendarValue.start = startDate"
-									/>
-								</PopoverContent>
-							</Popover>
-						</div>
-						<BarChart
-							v-if="analyticsGraphData.length > 0"
-							index="name"
+							index="date"
 							:data="analyticsGraphData"
 							:categories="['pageView']"
 							:type="'stacked'"
