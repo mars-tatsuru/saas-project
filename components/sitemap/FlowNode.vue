@@ -6,6 +6,22 @@ import {
 	useNode,
 	useNodesData,
 } from '@vue-flow/core';
+import { Icon } from '@iconify/vue';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const client = useSupabaseClient();
 
@@ -78,41 +94,98 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 		type="target"
 		:position="Position.Top"
 	/>
-	<div
-		class="node w-[200px] whitespace-normal break-words rounded-md bg-white px-2 py-4"
+	<Card
+		class="node relative w-[250px]"
 	>
-		<div class="mb-2 w-full">
+		<div
+			v-if="props.data.thumbnailPath && props.data.pageView"
+			class="absolute right-2 top-2 z-30"
+		>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger as-child>
+						<Button
+							variant="outline"
+							class="size-fit p-1"
+						>
+							<Icon
+								icon="logos:google-analytics"
+								class="size-4 dark:bg-[#1f1f1f]"
+							/>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent
+						class="p-4"
+					>
+						<p
+							v-if="props.data.dates"
+							class="mb-1 text-sm dark:text-white"
+						>
+							{{ props.data?.dates[0] }}~{{ props.data?.dates[props.data?.dates.length - 1] }}
+						</p>
+						<p
+							v-if="props.data.pageView"
+							class="text-xs dark:text-white"
+						>
+							<span class="text-base font-semibold text-[#10B981]">{{ props.data?.pageView }}</span> views
+						</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
+		</div>
+
+		<!-- thumbnail -->
+		<div
+			v-if="props.data.thumbnailPath"
+			class="relative mb-2 w-full"
+		>
 			<NuxtImg
 				v-if="props.data.thumbnailPath"
 				:src="getImageFromSupabaseStorage(props.data.thumbnailPath)"
 				:alt="props.data.title"
-				class="w-full"
+				class="w-full rounded-t-lg"
 				quality="60"
 				width="200"
 				height="100"
 				loading="lazy"
 			/>
 		</div>
-		<h3 class="mb-2 text-xs dark:text-black">
-			{{ props.data.title }}
-		</h3>
-		<p class="mb-2 text-xs dark:text-black">
-			Level: {{ props.data?.level }}
-		</p>
-		<a
-			v-if="props.data.thumbnailPath"
-			:href="props.data.url"
-			target="_blank"
-			class="inline-block w-full text-xs text-sky-700"
+
+		<CardContent
+			class="p-3"
 		>
-			{{ props.data.url }}
-		</a>
-		<p
-			v-else
-			class="mb-2 text-xs"
-		>
-			{{ props.data.url }}
-		</p>
+			<!-- title -->
+			<h3
+				v-if="props.data.thumbnailPath"
+				class="truncate text-xs dark:text-white"
+			>
+				{{ props.data.title }}
+			</h3>
+
+			<!-- url -->
+			<div class="">
+				<a
+					v-if="props.data.thumbnailPath"
+					:href="props.data.url"
+					target="_blank"
+					class="inline-block w-full truncate text-xs text-sky-700"
+				>
+					{{ props.data.url }}
+				</a>
+				<p
+					v-else
+					class="truncate text-xs"
+				>
+					{{ props.data.url }}
+				</p>
+			</div>
+
+			<!-- level -->
+			<!-- <p class="mb-2 text-xs dark:text-black">
+				Level: {{ props.data?.level }}
+			</p> -->
+
+			<!-- button -->
 		<!-- <div class="flex items-center gap-2">
 			<Button
 				class="mt-2 h-fit rounded-sm p-1 text-xs"
@@ -127,5 +200,6 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 				expand
 			</Button>
 		</div> -->
-	</div>
+		</CardContent>
+	</Card>
 </template>

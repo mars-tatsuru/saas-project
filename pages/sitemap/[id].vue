@@ -83,6 +83,8 @@ const createNode = (id: string, value: TreeNode, parentId?: string): Node => ({
 		level: value.level,
 		url: value.url,
 		thumbnailPath: value.thumbnailPath,
+		pageView: value.pageView || null,
+		dates: value.dates || '',
 	},
 });
 
@@ -115,7 +117,7 @@ const processData = (data: { [key: string]: TreeNode }, parentId?: string) => {
 		// Recursively process children
 		Object.entries(value).map(([childKey, childValue]) => {
 			if (
-				!['url', 'title', 'thumbnailPath', 'level', 'x', 'y'].includes(childKey)
+				!['url', 'title', 'thumbnailPath', 'level', 'x', 'y', 'pageView', 'dates'].includes(childKey)
 			) {
 				// 6 Recursion
 				const childProcessResult = processData(
@@ -196,7 +198,7 @@ const getSpecificGa4DataFromSupabase = async (): Promise<analyticsData> => {
 	if (data && data?.length > 0) {
 		const combinedRows = data[0].analytics_data.reduce((acc: any[], item: any) => {
 			const existingRow = acc.find(row =>
-				row.date === item.date,
+				row.date === item.date && row.domainName === item.domainName,
 			// row.date === item.date && row.domainName === item.domainName,
 			);
 
@@ -221,7 +223,12 @@ const getSpecificGa4DataFromSupabase = async (): Promise<analyticsData> => {
 		}));
 	};
 
-	return [];
+	if (error) {
+		console.error('Failed to fetch user data:', error);
+		return [];
+	}
+
+	return data[0].analytics_data;
 };
 
 // const { nodes: initialNodes, edges: initialEdges } = processData(tree);
@@ -255,99 +262,85 @@ onPaneReady(async (vueFlowInstance) => {
 	const crawlDataAndAnalyticsData = ref<any[]>([]);
 
 	analyticsData.value = await getSpecificGa4DataFromSupabase();
+	console.log(analyticsData.value);
+
 	crawlData.value = await getSpecificCrawlDataFromSupabase();
-	console.log('crawlData', crawlData.value);
-	console.log('analyticsData', analyticsData.value);
 
-	// TODO: analyticsData + crawlData
-	// crawlDataAndAnalyticsDataは、crawlData.value[0]?.json_dataの中のurlとanalyticsDataの中のdomainNameが一致するものを取得する
-	// if (crawlData.value && crawlData.value[0]?.json_data) {
-	// 	crawlDataAndAnalyticsData.value =	Object.entries(crawlData.value[0]?.json_data).map((item: TreeNode) => {
-	// 		const domainName = analyticsData.value.find(data => data.domainName === item.url);
+	if (analyticsData.value.length > 0) {
+		// combine crawlData and analyticsData
+		const combineAnalyticsDataByDomainName = analyticsData.value.reduce((acc: any[], item: any) => {
+			const existingRow = acc.find(row =>
+				row.domainName === item.domainName,
+			);
 
-	// 		if (!domainName) {
-	// 			return {
-	// 				...item,
-	// 				pageView: null,
-	// 			};
-	// 		}
+			if (existingRow) {
+				existingRow.pageView = Number(existingRow.pageView) + Number(item.pageView);
 
-	// 		const loop = (item: TreeNode) => {
-	// 			if (Object.keys(item).length > 1) {
-	// 				const children = Object.entries(item).map(([key, value]) => {
-	// 					const domainName = analyticsData.value.find(data => data.domainName === value.url);
+				if (!Array.isArray(existingRow.dates)) {
+					existingRow.dates = [existingRow.date];
+					delete existingRow.date;
+				}
+				existingRow.dates.push(item.date);
+			}
+			else {
+				acc.push({
+					domainName: item.domainName,
+					pageView: item.pageView,
+					dates: [item.date],
+				});
+			}
 
-	// 					if (!domainName) {
-	// 						return {
-	// 							...value,
-	// 							pageView: null,
-	// 						};
-	// 					}
+			return acc;
+		}, []);
 
-	// 					return {
-	// 						...value,
-	// 						pageView: domainName.pageView,
-	// 					};
-	// 				});
+		console.log(combineAnalyticsDataByDomainName);
+		console.log('crawlData.value', crawlData.value);
 
-	// 				return {
-	// 					...item,
-	// 					...children,
-	// 				};
-	// 			}
+		// TODO: Refactor this part
+		if (crawlData.value && crawlData.value[0].json_data) {
+			Object.entries(crawlData.value[0].json_data).map(([key, value], index) => {
+				const urlObject = new URL(value.url as string);
 
-	// 			return {
-	// 				...item,
-	// 				pageView: domainName.pageView,
-	// 			};
-	// 		};
+				// value urlの加工したもの
+				const resultUrl = urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
 
-	// 		loop(item);
+				// 一番上の階層のドメイン名を取得
+				const hostname = `${new URL(value.url as string).hostname}/`;
 
-	// 		return {
-	// 			...item,
-	// 			pageView: domainName.pageView,
-	// 		};
-	// 	});
+				const analyticsItem = combineAnalyticsDataByDomainName.find(
+					(item: { domainName: string; pageView: string }) =>
+						item.domainName === hostname || item.domainName === `${resultUrl}/`,
+				);
 
-	// 	console.log('crawlDataAndAnalyticsData', crawlDataAndAnalyticsData.value);
-	// }
+				crawlDataAndAnalyticsData.value.push({
+					[key]: {
+						...value,
+						pageView: analyticsItem?.pageView || 0,
+						dates: analyticsItem?.dates || '',
+					},
+				});
+			});
 
-	// if (crawlData.value?.[0]?.json_data) {
-	// 	const processNode = (node: TreeNode) => {
-	// 		console.log('node', node);
-	// 		const analytics = analyticsData.value.find(data => data.domainName === node.url);
+			console.log(crawlDataAndAnalyticsData.value);
+		}
 
-	// 		if (Object.keys(node).length > 1) {
-	// 			const processedChildren = Object.fromEntries(
-	// 				Object.entries(node).map(([key, value]) => [
-	// 					key,
-	// 					{
-	// 						...value,
-	// 						pageView: analyticsData.value.find(data => data.domainName === value.url)?.pageView ?? null,
-	// 					},
-	// 				]),
-	// 			);
-
-	// 			return { ...node, ...processedChildren };
-	// 		}
-
-	// 		return { ...node, pageView: analytics?.pageView ?? null };
-	// 	};
-
-	// 	crawlDataAndAnalyticsData.value = Object.entries(crawlData.value[0].json_data)
-	// 		.map(([key, value]) => processNode(value as TreeNode));
-
-	// 	console.log('crawlDataAndAnalyticsData', crawlDataAndAnalyticsData.value);
-	// }
-
-	// if crawlData has value, then process the data
-	if (crawlData.value && crawlData.value[0]?.json_data) {
-		const { nodes: specificNodes, edges: specificEdges } = processData(
-			crawlData.value[0].json_data as { [key: string]: TreeNode },
-		);
-		nodes.value = specificNodes;
-		edges.value = specificEdges;
+		// if crawlDataAndAnalyticsData has value, then process the data
+		if (crawlDataAndAnalyticsData.value && crawlDataAndAnalyticsData.value[0]) {
+			const { nodes: specificNodes, edges: specificEdges } = processData(
+				crawlDataAndAnalyticsData.value[0] as { [key: string]: TreeNode },
+			);
+			nodes.value = specificNodes;
+			edges.value = specificEdges;
+		}
+	}
+	else {
+		if (crawlData.value && crawlData.value[0].json_data) {
+			const { nodes: specificNodes, edges: specificEdges } = processData(
+				crawlData.value[0].json_data,
+			);
+			nodes.value = specificNodes;
+			edges.value = specificEdges;
+		}
 	}
 
 	isReadyRender.value = true;
