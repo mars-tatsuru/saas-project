@@ -61,6 +61,12 @@ type analyticsData = {
 	pageView: string;
 }[];
 
+type AnalyticsItem = {
+	domainName: string;
+	pageView: string;
+	dates: string;
+};
+
 type CrawlDataAndAnalyticsData = { [key: string]: TreeNode };
 
 // use for checking if the nodes are initialized
@@ -106,7 +112,6 @@ const processData = (data: { [key: string]: TreeNode }, parentId?: string) => {
 		const nodeId = processId ? `${processId}-${key}` : `${key}`;
 
 		if (value.url) {
-			console.log(value.url);
 			nodes.push(createNode(nodeId, value, processId));
 		}
 
@@ -262,8 +267,6 @@ onPaneReady(async (vueFlowInstance) => {
 	const crawlDataAndAnalyticsData = ref<any[]>([]);
 
 	analyticsData.value = await getSpecificGa4DataFromSupabase();
-	console.log(analyticsData.value);
-
 	crawlData.value = await getSpecificCrawlDataFromSupabase();
 
 	if (analyticsData.value.length > 0) {
@@ -293,23 +296,16 @@ onPaneReady(async (vueFlowInstance) => {
 			return acc;
 		}, []);
 
-		console.log(combineAnalyticsDataByDomainName);
-		console.log('crawlData.value', crawlData.value);
-
-		// TODO: Refactor this part
+		// TODO: Refactor this part!!!!!
 		if (crawlData.value && crawlData.value[0].json_data) {
-			Object.entries(crawlData.value[0].json_data).map(([key, value], index) => {
+			Object.entries(crawlData.value[0].json_data).map(([key, value]) => {
 				const urlObject = new URL(value.url as string);
-
-				// value urlの加工したもの
-				const resultUrl = urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
-
-				// 一番上の階層のドメイン名を取得
+				const valueUrl = urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
 				const hostname = `${new URL(value.url as string).hostname}/`;
 
 				const analyticsItem = combineAnalyticsDataByDomainName.find(
 					(item: { domainName: string; pageView: string }) =>
-						item.domainName === hostname || item.domainName === `${resultUrl}/`,
+						item.domainName === hostname || item.domainName === `${valueUrl}/`,
 				);
 
 				crawlDataAndAnalyticsData.value.push({
@@ -319,9 +315,46 @@ onPaneReady(async (vueFlowInstance) => {
 						dates: analyticsItem?.dates || '',
 					},
 				});
-			});
 
-			console.log(crawlDataAndAnalyticsData.value);
+				Object.entries(value).map(([childKey, childValue]) => {
+					if (typeof childValue === 'object') {
+						const childUrlObject = new URL(childValue.url as string);
+						const childValueUrl = childUrlObject.host + childUrlObject.pathname + childUrlObject.search + childUrlObject.hash;
+
+						const childrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
+							(item: { domainName: string; pageView: string }) => {
+								return item.domainName === `${childValueUrl}`;
+							});
+
+						crawlDataAndAnalyticsData.value[0][key][childKey] = {
+							...childValue,
+							pageView: childrenAnalyticsItem?.pageView || 0,
+							dates: childrenAnalyticsItem?.dates || '',
+						};
+
+						Object.entries(childValue).map(([grandChildKey, grandChildValue]) => {
+							if (typeof grandChildValue === 'object') {
+								if (grandChildValue) {
+									console.log('grandChildValue', grandChildValue);
+									const grandChildUrlObject = new URL(grandChildValue.url as string);
+									const grandChildValueUrl = grandChildUrlObject.host + grandChildUrlObject.pathname + grandChildUrlObject.search + grandChildUrlObject.hash;
+
+									const grandChildrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
+										(item: { domainName: string; pageView: string }) => {
+											return item.domainName === `${grandChildValueUrl}`;
+										});
+
+									crawlDataAndAnalyticsData.value[0][key][childKey][grandChildKey] = {
+										...grandChildValue,
+										pageView: grandChildrenAnalyticsItem?.pageView || 0,
+										dates: grandChildrenAnalyticsItem?.dates || '',
+									};
+								}
+							}
+						});
+					}
+				});
+			});
 		}
 
 		// if crawlDataAndAnalyticsData has value, then process the data

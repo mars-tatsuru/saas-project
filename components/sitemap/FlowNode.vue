@@ -97,6 +97,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 	<Card
 		class="node relative w-[250px]"
 	>
+		<!-- analytics -->
 		<div
 			v-if="props.data.thumbnailPath && props.data.pageView"
 			class="absolute right-2 top-2 z-30"
