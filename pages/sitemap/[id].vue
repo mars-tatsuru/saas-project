@@ -67,6 +67,11 @@ type AnalyticsItem = {
 	dates: string;
 };
 
+type CrawlValue = {
+	url: string;
+	[key: string]: any;
+};
+
 type CrawlDataAndAnalyticsData = { [key: string]: TreeNode };
 
 // use for checking if the nodes are initialized
@@ -296,65 +301,132 @@ onPaneReady(async (vueFlowInstance) => {
 			return acc;
 		}, []);
 
-		// TODO: Refactor this part!!!!!
+		// TODO: Refactor this part
 		if (crawlData.value && crawlData.value[0].json_data) {
-			Object.entries(crawlData.value[0].json_data).map(([key, value]) => {
-				const urlObject = new URL(value.url as string);
-				const valueUrl = urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
-				const hostname = `${new URL(value.url as string).hostname}/`;
+			// Object.entries(crawlData.value[0].json_data).map(([key, value]) => {
+			// 	const urlObject = new URL(value.url as string);
+			// 	const valueUrl = urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
+			// 	const hostname = `${new URL(value.url as string).hostname}/`;
 
-				const analyticsItem = combineAnalyticsDataByDomainName.find(
-					(item: { domainName: string; pageView: string }) =>
-						item.domainName === hostname || item.domainName === `${valueUrl}/`,
+			// 	const analyticsItem = combineAnalyticsDataByDomainName.find(
+			// 		(item: { domainName: string; pageView: string }) =>
+			// 			item.domainName === hostname || item.domainName === `${valueUrl}/`,
+			// 	);
+
+			// 	crawlDataAndAnalyticsData.value.push({
+			// 		[key]: {
+			// 			...value,
+			// 			pageView: analyticsItem?.pageView || 0,
+			// 			dates: analyticsItem?.dates || '',
+			// 		},
+			// 	});
+
+			// 	Object.entries(value).map(([childKey, childValue]) => {
+			// 		if (typeof childValue === 'object') {
+			// 			const childUrlObject = new URL(childValue.url as string);
+			// 			const childValueUrl = childUrlObject.host + childUrlObject.pathname + childUrlObject.search + childUrlObject.hash;
+
+			// 			const childrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
+			// 				(item: { domainName: string; pageView: string }) => {
+			// 					return item.domainName === `${childValueUrl}`;
+			// 				});
+
+			// 			crawlDataAndAnalyticsData.value[0][key][childKey] = {
+			// 				...childValue,
+			// 				pageView: childrenAnalyticsItem?.pageView || 0,
+			// 				dates: childrenAnalyticsItem?.dates || '',
+			// 			};
+
+			// 			Object.entries(childValue).map(([grandChildKey, grandChildValue]) => {
+			// 				if (typeof grandChildValue === 'object') {
+			// 					if (grandChildValue) {
+			// 						console.log('grandChildValue', grandChildValue);
+			// 						const grandChildUrlObject = new URL(grandChildValue.url as string);
+			// 						const grandChildValueUrl = grandChildUrlObject.host + grandChildUrlObject.pathname + grandChildUrlObject.search + grandChildUrlObject.hash;
+
+			// 						const grandChildrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
+			// 							(item: { domainName: string; pageView: string }) => {
+			// 								return item.domainName === `${grandChildValueUrl}`;
+			// 							});
+
+			// 						crawlDataAndAnalyticsData.value[0][key][childKey][grandChildKey] = {
+			// 							...grandChildValue,
+			// 							pageView: grandChildrenAnalyticsItem?.pageView || 0,
+			// 							dates: grandChildrenAnalyticsItem?.dates || '',
+			// 						};
+			// 					}
+			// 				}
+			// 			});
+			// 		}
+			// 	});
+			// });
+
+			function getUrlString(url: string): string {
+				const urlObject = new URL(url);
+				return urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
+			}
+
+			function findAnalyticsItem(url: string, analyticsData: AnalyticsItem[]): AnalyticsItem | undefined {
+				const urlString = getUrlString(url);
+				const hostname = `${new URL(url).hostname}/`;
+
+				return analyticsData.find(
+					item => item.domainName === urlString,
 				);
+			}
 
-				crawlDataAndAnalyticsData.value.push({
-					[key]: {
-						...value,
-						pageView: analyticsItem?.pageView || 0,
-						dates: analyticsItem?.dates || '',
-					},
-				});
+			function processNode(
+				value: CrawlValue,
+				analyticsData: AnalyticsItem[],
+			): CrawlValue {
+				if (!value || typeof value !== 'object' || !value.url) {
+					return value;
+				}
 
-				Object.entries(value).map(([childKey, childValue]) => {
-					if (typeof childValue === 'object') {
-						const childUrlObject = new URL(childValue.url as string);
-						const childValueUrl = childUrlObject.host + childUrlObject.pathname + childUrlObject.search + childUrlObject.hash;
+				const analyticsItem = findAnalyticsItem(value.url as string, analyticsData);
+				console.log('analyticsItem', analyticsItem);
 
-						const childrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
-							(item: { domainName: string; pageView: string }) => {
-								return item.domainName === `${childValueUrl}`;
-							});
+				const processedValue: { [key: string]: any } = {
+					...value,
+					pageView: analyticsItem?.pageView || 0,
+					dates: analyticsItem?.dates || '',
+				};
 
-						crawlDataAndAnalyticsData.value[0][key][childKey] = {
-							...childValue,
-							pageView: childrenAnalyticsItem?.pageView || 0,
-							dates: childrenAnalyticsItem?.dates || '',
-						};
-
-						Object.entries(childValue).map(([grandChildKey, grandChildValue]) => {
-							if (typeof grandChildValue === 'object') {
-								if (grandChildValue) {
-									console.log('grandChildValue', grandChildValue);
-									const grandChildUrlObject = new URL(grandChildValue.url as string);
-									const grandChildValueUrl = grandChildUrlObject.host + grandChildUrlObject.pathname + grandChildUrlObject.search + grandChildUrlObject.hash;
-
-									const grandChildrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
-										(item: { domainName: string; pageView: string }) => {
-											return item.domainName === `${grandChildValueUrl}`;
-										});
-
-									crawlDataAndAnalyticsData.value[0][key][childKey][grandChildKey] = {
-										...grandChildValue,
-										pageView: grandChildrenAnalyticsItem?.pageView || 0,
-										dates: grandChildrenAnalyticsItem?.dates || '',
-									};
-								}
-							}
-						});
+				// Process all nested objects recursively
+				Object.entries(value).forEach(([key, childValue]) => {
+					if (childValue && typeof childValue === 'object') {
+						processedValue[key] = processNode(childValue, analyticsData);
 					}
 				});
-			});
+
+				return { ...processedValue, url: value.url };
+			}
+
+			// Main processing function
+			function processCrawlData(
+				crawlData: { value?: Array<{ json_data?: Record<string, any> }> },
+				combineAnalyticsDataByDomainName: AnalyticsItem[],
+			): Record<string, any>[] {
+				if (!crawlData.value?.[0]?.json_data) {
+					return [];
+				}
+
+				const result: Record<string, any>[] = [];
+				const jsonData = crawlData.value[0].json_data;
+
+				Object.entries(jsonData).forEach(([key, value]) => {
+					result.push({
+						[key]: processNode(value, combineAnalyticsDataByDomainName),
+					});
+				});
+
+				return result;
+			}
+
+			crawlDataAndAnalyticsData.value = processCrawlData(
+				crawlData,
+				combineAnalyticsDataByDomainName,
+			);
 		}
 
 		// if crawlDataAndAnalyticsData has value, then process the data
