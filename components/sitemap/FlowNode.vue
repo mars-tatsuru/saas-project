@@ -95,7 +95,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 		:position="Position.Top"
 	/>
 	<Card
-		class="node relative w-[250px]"
+		class="node relative w-[250px] dark:border-[#1E1E1E] dark:bg-[#1E1E1E]"
 	>
 		<!-- analytics -->
 		<div
@@ -116,7 +116,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 						</Button>
 					</TooltipTrigger>
 					<TooltipContent
-						class="p-4"
+						class="p-4 dark:bg-[#1f1f1f]"
 					>
 						<p
 							v-if="props.data.dates"
@@ -169,7 +169,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 					v-if="props.data.thumbnailPath"
 					:href="props.data.url"
 					target="_blank"
-					class="inline-block w-full truncate text-xs text-sky-700"
+					class="inline-block w-full truncate text-xs text-[#344aab] dark:text-[#6c7ecd]"
 				>
 					{{ props.data.url }}
 				</a>
