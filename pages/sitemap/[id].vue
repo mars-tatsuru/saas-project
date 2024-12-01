@@ -209,7 +209,6 @@ const getSpecificGa4DataFromSupabase = async (): Promise<analyticsData> => {
 		const combinedRows = data[0].analytics_data.reduce((acc: any[], item: any) => {
 			const existingRow = acc.find(row =>
 				row.date === item.date && row.domainName === item.domainName,
-			// row.date === item.date && row.domainName === item.domainName,
 			);
 
 			if (existingRow) {
@@ -238,7 +237,7 @@ const getSpecificGa4DataFromSupabase = async (): Promise<analyticsData> => {
 		return [];
 	}
 
-	return data[0].analytics_data;
+	return data[0] ? data[0].analytics_data : [];
 };
 
 // const { nodes: initialNodes, edges: initialEdges } = processData(tree);
