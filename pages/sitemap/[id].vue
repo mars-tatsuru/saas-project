@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { VueFlow, useVueFlow, useNodesInitialized } from '@vue-flow/core';
+import { VueFlow, useVueFlow, useNodesInitialized, Panel } from '@vue-flow/core';
 import type { Node, Edge } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { MiniMap } from '@vue-flow/minimap';
@@ -8,6 +8,7 @@ import FlowNode from '@/components/sitemap/FlowNode.vue';
 import FlowEdge from '@/components/sitemap/FlowEdge.vue';
 import { useLayout } from '@/utils/useLayout';
 import { useStyledLog } from '@/utils/useStyledLog';
+import Controls from '@/components/sitemap/Controls.vue';
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
@@ -165,6 +166,7 @@ const layoutGraph = async (direction: string) => {
  *************************************************************/
 const {
 	fitView,
+	setCenter,
 	onPaneReady,
 	onInit,
 	onNodeDragStop,
@@ -302,64 +304,6 @@ onPaneReady(async (vueFlowInstance) => {
 
 		// TODO: Refactor this part
 		if (crawlData.value && crawlData.value[0].json_data) {
-			// Object.entries(crawlData.value[0].json_data).map(([key, value]) => {
-			// 	const urlObject = new URL(value.url as string);
-			// 	const valueUrl = urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
-			// 	const hostname = `${new URL(value.url as string).hostname}/`;
-
-			// 	const analyticsItem = combineAnalyticsDataByDomainName.find(
-			// 		(item: { domainName: string; pageView: string }) =>
-			// 			item.domainName === hostname || item.domainName === `${valueUrl}/`,
-			// 	);
-
-			// 	crawlDataAndAnalyticsData.value.push({
-			// 		[key]: {
-			// 			...value,
-			// 			pageView: analyticsItem?.pageView || 0,
-			// 			dates: analyticsItem?.dates || '',
-			// 		},
-			// 	});
-
-			// 	Object.entries(value).map(([childKey, childValue]) => {
-			// 		if (typeof childValue === 'object') {
-			// 			const childUrlObject = new URL(childValue.url as string);
-			// 			const childValueUrl = childUrlObject.host + childUrlObject.pathname + childUrlObject.search + childUrlObject.hash;
-
-			// 			const childrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
-			// 				(item: { domainName: string; pageView: string }) => {
-			// 					return item.domainName === `${childValueUrl}`;
-			// 				});
-
-			// 			crawlDataAndAnalyticsData.value[0][key][childKey] = {
-			// 				...childValue,
-			// 				pageView: childrenAnalyticsItem?.pageView || 0,
-			// 				dates: childrenAnalyticsItem?.dates || '',
-			// 			};
-
-			// 			Object.entries(childValue).map(([grandChildKey, grandChildValue]) => {
-			// 				if (typeof grandChildValue === 'object') {
-			// 					if (grandChildValue) {
-			// 						console.log('grandChildValue', grandChildValue);
-			// 						const grandChildUrlObject = new URL(grandChildValue.url as string);
-			// 						const grandChildValueUrl = grandChildUrlObject.host + grandChildUrlObject.pathname + grandChildUrlObject.search + grandChildUrlObject.hash;
-
-			// 						const grandChildrenAnalyticsItem = combineAnalyticsDataByDomainName.find(
-			// 							(item: { domainName: string; pageView: string }) => {
-			// 								return item.domainName === `${grandChildValueUrl}`;
-			// 							});
-
-			// 						crawlDataAndAnalyticsData.value[0][key][childKey][grandChildKey] = {
-			// 							...grandChildValue,
-			// 							pageView: grandChildrenAnalyticsItem?.pageView || 0,
-			// 							dates: grandChildrenAnalyticsItem?.dates || '',
-			// 						};
-			// 					}
-			// 				}
-			// 			});
-			// 		}
-			// 	});
-			// });
-
 			function getUrlString(url: string): string {
 				const urlObject = new URL(url);
 				return urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
@@ -571,13 +515,9 @@ const collapseNode = (filterNodesPosition: any) => {
 				},
 				position: {
 					x:
-            node.id === filterNodesPosition[0].id
-            	? filterNodesPosition[0].x
-            	: filterNodesPosition[0].x + index,
+            node.id === filterNodesPosition[0].id ? filterNodesPosition[0].x : filterNodesPosition[0].x + index,
 					y:
-            node.id === filterNodesPosition[0].id
-            	? filterNodesPosition[0].y
-            	: filterNodesPosition[0].y + index,
+            node.id === filterNodesPosition[0].id ? filterNodesPosition[0].y : filterNodesPosition[0].y + index,
 				},
 			};
 		}
@@ -638,6 +578,79 @@ const expandNode = (nodeId: string) => {
 	}, 300);
 };
 
+/***********************************************************************
+ * search doms
+ ***********************************************************************/
+const hitItems = ref<Node[]>([]);
+const hitCount = ref<number>(0);
+const searchDom = async (siteTitle: string) => {
+	onInit(async (vueFlowInstance) => {
+		useStyledLog('1. onInit');
+	});
+
+	hitItems.value = [];
+	hitCount.value = 0;
+
+	nodes.value.forEach((node: Node) => {
+		if (node.data.title.includes(siteTitle)) {
+			hitItems.value.push(node);
+			hitCount.value += 1;
+		}
+	});
+
+	if (hitItems.value.length > 0) {
+		setCenter(
+			hitItems.value[0].position.x,
+			hitItems.value[0].position.y,
+			{
+				zoom: 1,
+				duration: 1000,
+			},
+		);
+
+		fitView({
+			nodes: [hitItems.value[0].id],
+			duration: 1000,
+			padding: 1,
+		});
+	}
+};
+
+const moveToSearchedNode = (order: number) => {
+	onInit(async (vueFlowInstance) => {
+		useStyledLog('1. onInit');
+	});
+
+	const isOrderValid = order > hitItems.value.length || order < 1;
+
+	if (isOrderValid) {
+		setCenter(
+			hitItems.value[order].position.x,
+			hitItems.value[order].position.y,
+			{
+				zoom: 1,
+				duration: 1000,
+			},
+		);
+	}
+	else {
+		setCenter(
+			hitItems.value[order - 1].position.x,
+			hitItems.value[order - 1].position.y,
+			{
+				zoom: 1,
+				duration: 1000,
+			},
+		);
+	}
+
+	fitView({
+		nodes: [hitItems.value[order].id],
+		duration: 1000,
+		padding: 1,
+	});
+};
+
 // HELPER FUNCTION
 const removeTransitionStyle = () => {
 	const allNodes = document.querySelectorAll(
@@ -663,6 +676,13 @@ const removeTransitionStyle = () => {
 				<Background
 					pattern-color="#aaa"
 					:gap="16"
+				/>
+
+				<Controls
+					:hit-count="hitCount"
+					@move-down="moveToSearchedNode"
+					@move-up="moveToSearchedNode"
+					@search-dom="searchDom"
 				/>
 
 				<template #node-custom="customNodeProps">
