@@ -591,12 +591,16 @@ const searchDom = async (siteTitle: string) => {
 	hitItems.value = [];
 	hitCount.value = 0;
 
-	nodes.value.forEach((node: Node) => {
-		if (node.data.title.includes(siteTitle)) {
-			hitItems.value.push(node);
-			hitCount.value += 1;
-		}
-	});
+	console.log('siteTitle', siteTitle);
+
+	if (siteTitle) {
+		nodes.value.forEach((node: Node) => {
+			if (node.data.title.includes(siteTitle)) {
+				hitItems.value.push(node);
+				hitCount.value += 1;
+			}
+		});
+	}
 
 	if (hitItems.value.length > 0) {
 		setCenter(
