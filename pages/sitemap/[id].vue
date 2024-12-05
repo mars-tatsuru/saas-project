@@ -305,13 +305,20 @@ onPaneReady(async (vueFlowInstance) => {
 		// TODO: Refactor this part
 		if (crawlData.value && crawlData.value[0].json_data) {
 			function getUrlString(url: string): string {
-				const urlObject = new URL(url);
-				return urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
+				// top/ja/case-studies/marsfinder ⇦ これはだめ
+				// https://www.toppan.co.jp/ja/case-studies/marsfinder ⇦ これはOK
+
+				if (URL.canParse(url)) {
+					const urlObject = new URL(url);
+					return urlObject.host + urlObject.pathname + urlObject.search + urlObject.hash;
+				}
+
+				return '';
 			}
 
 			function findAnalyticsItem(url: string, analyticsData: AnalyticsItem[]): AnalyticsItem | undefined {
 				const urlString = getUrlString(url);
-				const hostname = `${new URL(url).hostname}/`;
+				const hostname = URL.canParse(url) ? `${new URL(url).hostname}/` : '';
 
 				return analyticsData.find(
 					item => item.domainName === urlString,
@@ -327,7 +334,6 @@ onPaneReady(async (vueFlowInstance) => {
 				}
 
 				const analyticsItem = findAnalyticsItem(value.url as string, analyticsData);
-				console.log('analyticsItem', analyticsItem);
 
 				const processedValue: { [key: string]: any } = {
 					...value,
@@ -590,8 +596,6 @@ const searchDom = async (siteTitle: string) => {
 
 	hitItems.value = [];
 	hitCount.value = 0;
-
-	console.log('siteTitle', siteTitle);
 
 	if (siteTitle) {
 		nodes.value.forEach((node: Node) => {
