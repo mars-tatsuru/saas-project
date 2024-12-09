@@ -90,7 +90,7 @@ const closeModal = () => {
 	deleteData.value = null;
 };
 
-const deleteCrawlData = async () => {
+const deleteCrawlDataAndGa4Data = async () => {
 	// Start loading
 	isLoading.value = true;
 
@@ -136,12 +136,19 @@ const deleteCrawlData = async () => {
 		}
 
 		// 4. Delete crawl data from database
-		const { error: dbError } = await client
+		const { error: crawlDbError } = await client
 			.from('crawl_data')
 			.delete()
 			.eq('id', deleteData.value.id);
 
-		if (dbError) throw dbError;
+		if (crawlDbError) throw crawlDbError;
+
+		const { error: ga4DbError } = await client
+			.from('ga4_data')
+			.delete()
+			.eq('id', deleteData.value.id);
+
+		if (ga4DbError) throw ga4DbError;
 
 		await getDataFromSupabase();
 
@@ -329,7 +336,7 @@ watchEffect(async () => {
 										戻る
 									</AlertDialogCancel>
 									<AlertDialogAction
-										@click="deleteCrawlData"
+										@click="deleteCrawlDataAndGa4Data"
 									>
 										{{ isLoading ? '削除中...' : '削除する' }}
 									</AlertDialogAction>

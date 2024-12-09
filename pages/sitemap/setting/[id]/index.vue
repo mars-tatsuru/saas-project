@@ -243,7 +243,7 @@ onMounted(async () => {
 									<Button
 										variant="outline"
 										:class="!calendarValue && 'text-muted-foreground'"
-										class="w-[280px] justify-start text-left font-normal"
+										class="w-[280px] justify-start text-left font-normal dark:border-[#4c4c4c] dark:bg-[#1f1f1f] dark:text-white dark:hover:bg-[#181818]"
 										:disabled="!analyticsGraphData.length"
 									>
 										<CalendarIcon class="mr-2 size-4" />
@@ -264,6 +264,7 @@ onMounted(async () => {
 								<PopoverContent class="w-auto p-0">
 									<RangeCalendar
 										v-model="calendarValue"
+										class="rounded-md dark:bg-[#1f1f1f]"
 										initial-focus
 										:number-of-months="2"
 										@update:start-value="(startDate) => calendarValue.start = startDate"

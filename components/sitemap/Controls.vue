@@ -36,7 +36,7 @@ watch(() => props.hitCount, (newValue) => {
 
 <template>
 	<Panel
-		class="w-96 rounded-md bg-white p-2"
+		class="w-96 rounded-md bg-white p-2 dark:bg-[#171717]"
 		position="top-right"
 	>
 		<div class="flex w-full max-w-sm items-center gap-1.5">
@@ -44,7 +44,7 @@ watch(() => props.hitCount, (newValue) => {
 				<Input
 					v-model="siteTitle"
 					placeholder="サイトタイトル"
-					class="w-full"
+					class="w-full dark:border-[#4c4c4c]"
 				/>
 				<span
 					v-if="props.hitCount > 0"

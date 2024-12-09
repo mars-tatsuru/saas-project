@@ -95,7 +95,7 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 		:position="Position.Top"
 	/>
 	<Card
-		class="node relative w-[250px] dark:border-[#1E1E1E] dark:bg-[#1E1E1E]"
+		class="node relative w-[250px] dark:border-[#4c4c4c] dark:bg-[#1E1E1E]"
 	>
 		<!-- analytics -->
 		<div
@@ -138,16 +138,14 @@ const getImageFromSupabaseStorage = (thumbnailPath: string) => {
 		<!-- thumbnail -->
 		<div
 			v-if="props.data.thumbnailPath"
-			class="relative mb-2 w-full"
+			class="relative mb-2 h-[120px] w-full overflow-hidden"
 		>
 			<NuxtImg
 				v-if="props.data.thumbnailPath"
 				:src="getImageFromSupabaseStorage(props.data.thumbnailPath)"
 				:alt="props.data.title"
-				class="w-full rounded-t-lg"
+				class="size-full rounded-t-lg object-fill"
 				quality="60"
-				width="200"
-				height="100"
 				loading="lazy"
 			/>
 		</div>
